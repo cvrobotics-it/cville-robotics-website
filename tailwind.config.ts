@@ -14,5 +14,8 @@ export default {
       },
     },
   },
-  plugins: [],
+  daisyui: {
+    themes: ["nord"],
+  },
+  plugins: [require("daisyui")],
 } satisfies Config;
