@@ -7,7 +7,7 @@ function NotFound() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-base-200 text-center">
       <h1 className="text-6xl font-bold text-error">404</h1>
       <p className="mt-4 text-2xl text-base-content">
-        Oops! It seems you've taken a wrong turn on our robotics field.
+        Oops! It seems you&apos;ve taken a wrong turn on our robotics field.
       </p>
       <p className="mt-2 text-base-content">
         But don’t worry, you can always{" "}

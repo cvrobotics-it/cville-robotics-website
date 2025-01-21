@@ -78,10 +78,10 @@ export default function InfoCards() {
             </figure>
             <div className="card-body lg:w-1/2">
               <h2 className="card-title text-4xl font-bold text-primary">
-                Parent's Corner
+                Parent&apos;s Corner
               </h2>
               <p className="text-lg">
-                Check out our website for Centreville Robotics Parent's!
+                Check out our website for Centreville Robotics Parent&apos;s!
               </p>
               <div className="card-actions justify-end">
                 <Link

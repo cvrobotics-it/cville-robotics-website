@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="flex flex-col items-start">
             <h3 className="text-lg font-bold mb-4">Follow Us</h3>
             <div className="flex gap-4">
-              <a
+              <Link
                 href="https://www.instagram.com/cvillerobotics"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -18,7 +18,7 @@ export default function Footer() {
                 aria-label="Instagram"
               >
                 <Instagram className="w-6 h-6" />
-              </a>
+              </Link>
               {/* Add more social media icons as needed */}
             </div>
           </div>
@@ -56,24 +56,24 @@ export default function Footer() {
             <h3 className="text-lg font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <a href="/" className="link link-hover">
+                <Link href="/" className="link link-hover">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/about" className="link link-hover">
+                <Link href="/about" className="link link-hover">
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/contact" className="link link-hover">
+                <Link href="/contact" className="link link-hover">
                   Contact
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="/outreach" className="link link-hover">
+                <Link href="/outreach" className="link link-hover">
                   Outreach
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

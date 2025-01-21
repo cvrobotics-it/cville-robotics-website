@@ -21,7 +21,7 @@ export default function StemAppreciation() {
               <p className="mb-6 text-sm">
                 FIRST Robotics Competition is a game-based competition for
                 grades 9-12, where students design and build robots to achieve
-                each year's unique challenge.
+                each year&apos;s unique challenge.
               </p>
               <div className="card-actions">
                 <Link
@@ -60,7 +60,7 @@ export default function StemAppreciation() {
               <h3 className="card-title text-2xl font-semibold mb-4">FTC</h3>
               <p className="mb-6 text-sm">
                 FIRST Tech Challenge lets teams of 10-15 students build a small
-                (18x18x18) robot to compete in each year's exciting game
+                (18x18x18) robot to compete in each year&apos;s exciting game
                 challenge.
               </p>
               <div className="card-actions">

@@ -126,16 +126,17 @@ export default function TeamHistory() {
           <p className="text-lg text-base-content">
             Aegis Robotics was first formed in the fall of 2013 (then called
             Wildcat Robotics) by 12 passionate students and one incredible
-            mentor. Since it's inception, our FRC team has gone through many
-            names, but decided on our current one, Aegis Robotics in the summer
-            of 2017. From team 5243 we grew our organization into 10 FTC teams,
-            2 FLL teams and our original FRC Team 5243. However, the 2020
+            mentor. Since it&apos;s inception, our FRC team has gone through
+            many names, but decided on our current one, Aegis Robotics in the
+            summer of 2017. From team 5243 we grew our organization into 10 FTC
+            teams, 2 FLL teams and our original FRC Team 5243. However, the 2020
             COVID-19 pandemic hit our program hard and currently we have two FTC
             teams, an FLL club, and an FRC team. We strive to cultivate a newer
             and brighter future for upcoming generations by enabling them to
             approach real-world problems creatively and intuitively through
-            their experience in STEM and robotics. If you'd like to learn more
-            about our efforts in STEM Education click the link below. Learn more
+            their experience in STEM and robotics. If you&apos;d like to learn
+            more about our efforts in STEM Education click the link below. Learn
+            more
           </p>
         </div>
 
