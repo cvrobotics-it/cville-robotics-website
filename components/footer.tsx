@@ -84,7 +84,7 @@ export default function Footer() {
             © {new Date().getFullYear()} Centreville Robotics Team. All rights
             reserved.
           </p>
-          <p className="text-sm">
+          <p className="text-xs">
             Website designed and developed by{" "}
             <Link
               className="link"

@@ -5,7 +5,7 @@ const backgroundImageUrl = encodeURI(
 export default function HeroSection() {
   return (
     <div
-      className="hero min-h-[500px] bg-cover bg-center"
+      className="hero min-h-[300px] sm:min-h-[400px] md:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px] bg-cover bg-center flex items-center justify-center"
       style={{ backgroundImage: `url(${backgroundImageUrl})` }}
     ></div>
   );
