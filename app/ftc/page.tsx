@@ -26,7 +26,7 @@ export default function FTCTeams() {
     <section className="py-16 bg-base-100">
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold text-center text-neutral mb-12">
-          Our FTC Teams
+          Our Past FTC Teams
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {teams.map((team) => (

@@ -1,10 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Carousel } from "react-responsive-carousel";
 
 export default function Gallery() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   const gallery = [
     {
       title: "2023-2024 FTC",
@@ -215,33 +221,39 @@ export default function Gallery() {
               {/* Centered Carousel */}
               <div className="flex justify-center">
                 <div className="w-full max-w-2xl">
-                  <Carousel
-                    infiniteLoop
-                    dynamicHeight={false}
-                    autoPlay
-                    interval={3000}
-                    showArrows
-                    showIndicators
-                    swipeable
-                    transitionTime={700}
-                  >
-                    {section.images.map((image, idx) => (
-                      <div
-                        key={idx}
-                        className="w-full h-64 flex items-center justify-center"
-                      >
-                        {/* Ensure the image is centered vertically and horizontally */}
-                        <img
-                          src={image}
-                          alt={`${section.title} Image ${idx + 1}`}
-                          width={500}
-                          height={300}
-                          className="rounded-lg object-cover"
-                          loading="lazy"
-                        />
-                      </div>
-                    ))}
-                  </Carousel>
+                  {isClient ? (
+                    <Carousel
+                      infiniteLoop
+                      dynamicHeight={false}
+                      autoPlay
+                      interval={3000}
+                      showArrows
+                      showIndicators
+                      swipeable
+                      transitionTime={700}
+                    >
+                      {section.images.map((image, idx) => (
+                        <div
+                          key={idx}
+                          className="w-full h-64 flex items-center justify-center"
+                        >
+                          {/* Ensure the image is centered vertically and horizontally */}
+                          <img
+                            src={image}
+                            alt={`${section.title} Image ${idx + 1}`}
+                            width={500}
+                            height={300}
+                            className="rounded-lg object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      ))}
+                    </Carousel>
+                  ) : (
+                    <div className="w-full h-64 flex items-center justify-center bg-gray-200 rounded-lg">
+                      <div className="text-gray-500">Loading gallery...</div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

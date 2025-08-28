@@ -51,7 +51,11 @@ export default function Sponsors() {
                 {sponsor.name}
               </h3>
               <p className="text-base-content mb-4">{sponsor.description}</p>
-              <Link href={sponsor.link} className="btn btn-secondary">
+              <Link
+                href={sponsor.link}
+                className="btn btn-secondary"
+                target="_blank"
+              >
                 Learn More
               </Link>
             </div>
