@@ -30,57 +30,12 @@ export default function ContactPage() {
           </h2>
           <ul className="text-lg space-y-4 mb-8">
             <li>
-              <strong>General:</strong>{" "}
+              <strong>General Contact:</strong>{" "}
               <a
-                href="mailto:5243@centrevillebotics.net"
+                href="mailto:mentors@centrevillerobotics.net"
                 className="link link-primary"
               >
-                5243@centrevillebotics.net
-              </a>
-            </li>
-            <li>
-              <strong>Coach:</strong>{" "}
-              <a
-                href="mailto:annagrace@centrevillebotics.net"
-                className="link link-primary"
-              >
-                annagrace@centrevillebotics.net
-              </a>
-            </li>
-            <li>
-              <strong>COO (Outreach Specific):</strong>{" "}
-              <a
-                href="mailto:coo@centrevillebotics.net"
-                className="link link-primary"
-              >
-                coo@centrevillebotics.net
-              </a>
-            </li>
-            <li>
-              <strong>CEO (Non-Engineering Specific):</strong>{" "}
-              <a
-                href="mailto:ceo@centrevillebotics.net"
-                className="link link-primary"
-              >
-                ceo@centrevillebotics.net
-              </a>
-            </li>
-            <li>
-              <strong>CTO (Engineering Specific):</strong>{" "}
-              <a
-                href="mailto:cto@centrevillebotics.net"
-                className="link link-primary"
-              >
-                cto@centrevillebotics.net
-              </a>
-            </li>
-            <li>
-              <strong>CFO (Finance Specific):</strong>{" "}
-              <a
-                href="mailto:cfo@centrevillebotics.net"
-                className="link link-primary"
-              >
-                cfo@centrevillebotics.net
+                mentors@centrevillerobotics.net
               </a>
             </li>
           </ul>

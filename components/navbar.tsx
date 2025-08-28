@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { CalendarIcon } from "lucide-react";
 
 export default function Navbar() {
   return (
@@ -41,6 +42,18 @@ export default function Navbar() {
             <li>
               <Link href="/join">Join Robotics!</Link>
             </li>
+            <li>
+              <Link href="/ftc">FTC Teams</Link>
+            </li>
+            <li>
+              <Link href="/outreach/past">Past Outreach</Link>
+            </li>
+            <li>
+              <Link href="/outreach/calendar">📅 Our Calendar</Link>
+            </li>
+            <li>
+              <Link href="/gallery">Fun Stuff</Link>
+            </li>
           </ul>
         </div>
         <div className="hidden lg:flex">
@@ -56,6 +69,9 @@ export default function Navbar() {
             </li>
             <li>
               <Link href="/contact">Contact</Link>
+            </li>
+            <li>
+              <Link href="/join">Join Robotics!</Link>
             </li>
           </ul>
         </div>
@@ -76,9 +92,6 @@ export default function Navbar() {
       <div className="navbar-end">
         <ul className="menu menu-horizontal px-1 hidden lg:flex">
           <li>
-            <Link href="/aegis">Aegis Robotics 5243</Link>
-          </li>
-          <li>
             <Link href="/ftc">FTC Teams</Link>
           </li>
           <li>
@@ -94,7 +107,12 @@ export default function Navbar() {
             </details>
           </li>
           <li>
-            <Link href="/gallery">Gallery</Link>
+            <Link href="/outreach/calendar" className="btn btn-ghost">
+              <CalendarIcon className="w-5 h-5" />
+            </Link>
+          </li>
+          <li>
+            <Link href="/gallery">Fun Stuff</Link>
           </li>
         </ul>
       </div>
