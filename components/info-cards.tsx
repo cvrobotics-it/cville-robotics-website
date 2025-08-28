@@ -89,6 +89,7 @@ export default function InfoCards() {
                     "https://sites.google.com/view/cvilleroboticsparentpage/home"
                   }
                   className="btn btn-primary"
+                  target="_blank"
                 >
                   Learn More
                 </Link>

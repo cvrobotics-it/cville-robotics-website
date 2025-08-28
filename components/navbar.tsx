@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { CalendarIcon } from "lucide-react";
 
 export default function Navbar() {
   return (
@@ -41,6 +42,18 @@ export default function Navbar() {
             <li>
               <Link href="/join">Join Robotics!</Link>
             </li>
+            <li>
+              <Link href="/ftc">FTC Teams</Link>
+            </li>
+            <li>
+              <Link href="/outreach/past">Past Outreach</Link>
+            </li>
+            <li>
+              <Link href="/outreach/calendar">📅 Our Calendar</Link>
+            </li>
+            <li>
+              <Link href="/gallery">Fun Stuff</Link>
+            </li>
           </ul>
         </div>
         <div className="hidden lg:flex">
@@ -67,20 +80,17 @@ export default function Navbar() {
       <div className="navbar-center">
         <Link href="/">
           <Image
-            src="https://images.squarespace-cdn.com/content/v1/57b0d73ce58c62414be1ae5e/1533772074515-Z6KXRL18HUCX6XAL0U6T/pic.svg.png?format=750w"
+            src="https://cdn.discordapp.com/attachments/1146452997451300905/1326714444528615476/CR_Logo_Vector_2023-One_Color_Dark.png?ex=68b0f91c&is=68afa79c&hm=d58d17b5ba53cf5ed3a059f6a7fe9e393ef1e27accf75a7c3cf9a7c313e2b467&"
             alt="Centreville Robotics Logo"
-            width={150}
-            height={40}
-            className="h-10 w-auto"
+            width={250}
+            height={48}
+            className="h-16 w-auto"
           />
         </Link>
       </div>
 
       <div className="navbar-end">
         <ul className="menu menu-horizontal px-1 hidden lg:flex">
-          <li>
-            <Link href="/aegis">Aegis Robotics 5243</Link>
-          </li>
           <li>
             <Link href="/ftc">FTC Teams</Link>
           </li>
@@ -93,16 +103,16 @@ export default function Navbar() {
                     Past Outreach
                   </Link>
                 </li>
-                <li>
-                  <Link href="/outreach/calendar" className="btn btn-ghost">
-                    Our Calendar
-                  </Link>
-                </li>
               </ul>
             </details>
           </li>
           <li>
-            <Link href="/gallery">Gallery</Link>
+            <Link href="/outreach/calendar" className="btn btn-ghost">
+              <CalendarIcon className="w-5 h-5" />
+            </Link>
+          </li>
+          <li>
+            <Link href="/gallery">Fun Stuff</Link>
           </li>
         </ul>
       </div>
