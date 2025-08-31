@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import SponsorshipCta from "@/components/sponsorship-cta";
 
 const sponsors = [
   {
@@ -61,6 +62,9 @@ export default function Sponsors() {
             </div>
           ))}
         </div>
+
+        {/* Become a Sponsor CTA */}
+        <SponsorshipCta />
       </div>
     </section>
   );

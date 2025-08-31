@@ -1,121 +1,216 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { CalendarIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+
+type NavItem = { label: string; href: string };
+
+const primaryLinks: NavItem[] = [
+  { label: "Home", href: "/" },
+  { label: "Sponsors", href: "/sponsors" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+  { label: "FTC Teams", href: "/ftc" },
+  { label: "Gallery", href: "/gallery" },
+];
+
+const outreachLinks: NavItem[] = [
+  { label: "Outreach Data", href: "/outreach" },
+  { label: "Past Outreach", href: "/outreach/past" },
+  { label: "Calendar", href: "/outreach/calendar" },
+];
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (open) {
+      document.body.classList.add("overflow-hidden");
+      closeBtnRef.current?.focus();
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [open]);
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname?.startsWith(href);
+
   return (
-    <div className="navbar bg-base-100">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <label tabIndex={0} className="btn btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
+    <header className="sticky top-0 z-50 bg-base-100/80 backdrop-blur border-b border-base-300">
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 btn btn-sm"
+      >
+        Skip to content
+      </a>
+      <div className="container mx-auto px-4">
+        <div className="navbar px-0">
+          <div className="flex-1">
+            <Link
+              href="/"
+              aria-label="Go to homepage"
+              className="flex items-center gap-2"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
+              <Image
+                src="/logo.webp"
+                alt="Centreville Robotics Logo"
+                width={180}
+                height={40}
+                priority
+                sizes="(max-width: 1024px) 40vw, 180px"
+                className="h-12 w-auto"
               />
-            </svg>
-          </label>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
-          >
-            <li>
-              <Link href="/">Home</Link>
-            </li>
-            <li>
-              <Link href="/sponsors">Sponsors</Link>
-            </li>
-            <li>
-              <Link href="/about">About</Link>
-            </li>
-            <li>
-              <Link href="/contact">Contact</Link>
-            </li>
-            <li>
-              <Link href="/join">Join Robotics!</Link>
-            </li>
-            <li>
-              <Link href="/ftc">FTC Teams</Link>
-            </li>
-            <li>
-              <Link href="/outreach/past">Past Outreach</Link>
-            </li>
-            <li>
-              <Link href="/outreach/calendar">📅 Our Calendar</Link>
-            </li>
-            <li>
-              <Link href="/gallery">Fun Stuff</Link>
-            </li>
-          </ul>
-        </div>
-        <div className="hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
-            <li>
-              <Link href="/">Home</Link>
-            </li>
-            <li>
-              <Link href="/sponsors">Sponsors</Link>
-            </li>
-            <li>
-              <Link href="/about">About</Link>
-            </li>
-            <li>
-              <Link href="/contact">Contact</Link>
-            </li>
-            <li>
-              <Link href="/join">Join Robotics!</Link>
-            </li>
-          </ul>
-        </div>
-      </div>
+            </Link>
+          </div>
 
-      <div className="navbar-center">
-        <Link href="/">
-          <Image
-            src="https://cdn.discordapp.com/attachments/1146452997451300905/1326714444528615476/CR_Logo_Vector_2023-One_Color_Dark.png?ex=68b0f91c&is=68afa79c&hm=d58d17b5ba53cf5ed3a059f6a7fe9e393ef1e27accf75a7c3cf9a7c313e2b467&"
-            alt="Centreville Robotics Logo"
-            width={250}
-            height={48}
-            className="h-16 w-auto"
-          />
-        </Link>
-      </div>
-
-      <div className="navbar-end">
-        <ul className="menu menu-horizontal px-1 hidden lg:flex">
-          <li>
-            <Link href="/ftc">FTC Teams</Link>
-          </li>
-          <li>
-            <details className="dropdown dropdown-end mb-0 pb-0">
-              <summary>Outreach</summary>
-              <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow mt-2">
-                <li>
-                  <Link href="/outreach/past" className="btn btn-ghost">
-                    Past Outreach
+          <nav className="hidden lg:flex items-center gap-2">
+            <ul className="menu menu-horizontal px-0">
+              {primaryLinks.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={isActive(item.href) ? "active" : ""}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                  >
+                    {item.label}
                   </Link>
                 </li>
-              </ul>
-            </details>
-          </li>
-          <li>
-            <Link href="/outreach/calendar" className="btn btn-ghost">
-              <CalendarIcon className="w-5 h-5" />
+              ))}
+              <li>
+                <details className="dropdown dropdown-end">
+                  <summary
+                    className={
+                      pathname?.startsWith("/outreach") ? "active" : ""
+                    }
+                  >
+                    Outreach
+                  </summary>
+                  <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-56 p-2 shadow mt-2">
+                    {outreachLinks.map((o) => (
+                      <li key={o.href}>
+                        <Link href={o.href}>{o.label}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              </li>
+              <li>
+                <Link
+                  href="/outreach/calendar"
+                  aria-label="Calendar"
+                  title="Calendar"
+                >
+                  <CalendarIcon className="w-5 h-5" />
+                </Link>
+              </li>
+            </ul>
+            <Link href="/join" className="btn btn-primary ml-2">
+              Join Robotics
             </Link>
-          </li>
-          <li>
-            <Link href="/gallery">Fun Stuff</Link>
-          </li>
-        </ul>
+          </nav>
+
+          <div className="lg:hidden">
+            <button
+              type="button"
+              className="btn btn-ghost"
+              aria-label="Open menu"
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              onClick={() => setOpen(true)}
+            >
+              {/* Hamburger icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-5 h-5"
+              >
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+
+      {open && (
+        <div
+          id="mobile-menu"
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-[60] bg-base-100"
+          onKeyDown={(e) => {
+            if (e.key === "Escape") setOpen(false);
+          }}
+        >
+          <div className="container mx-auto px-4 py-4 flex items-center justify-between border-b border-base-300">
+            <span className="font-semibold">Menu</span>
+            <button
+              ref={closeBtnRef}
+              type="button"
+              className="btn btn-ghost"
+              aria-label="Close menu"
+              onClick={() => setOpen(false)}
+            >
+              {/* X icon */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-5 h-5"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+          <nav className="container mx-auto px-4 py-4">
+            <ul className="menu menu-lg bg-base-100">
+              {primaryLinks.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className={isActive(item.href) ? "active" : ""}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+              <li className="menu-title">Outreach</li>
+              {outreachLinks.map((o) => (
+                <li key={o.href}>
+                  <Link href={o.href}>{o.label}</Link>
+                </li>
+              ))}
+              <li>
+                <Link href="/join" className="btn btn-primary mt-2">
+                  Join Robotics
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      )}
+    </header>
   );
 }
