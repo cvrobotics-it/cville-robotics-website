@@ -9,7 +9,7 @@ export default function SponsorshipCta() {
   useEffect(() => {
     let mounted = true;
     // Try to see if the PDF exists; this avoids showing a broken link in prod
-    fetch("/sponsorship-packet.pdf", { method: "HEAD" })
+    fetch("/2025-2026 Sponsorship Proposal Packet.pdf", { method: "HEAD" })
       .then((res) => {
         if (!mounted) return;
         setAvailable(res.ok);
@@ -41,7 +41,7 @@ export default function SponsorshipCta() {
           <div className="card-actions mt-4 items-center gap-3 flex-col sm:flex-row">
             {available ? (
               <a
-                href="/sponsorship-packet.pdf"
+                href="/2025-2026 Sponsorship Proposal Packet.pdf"
                 download
                 className="btn btn-primary"
               >
