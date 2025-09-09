@@ -17,8 +17,8 @@ export default function CarouselsSection({ albums }: { albums: Album[] }) {
               <LazyMount>
                 <AlbumCarousel
                   album={album}
-                  maxWidth="max-w-2xl"
-                  aspect="aspect-[16/10]"
+                  maxWidth="max-w-3xl"
+                  aspect="aspect-[16/9]"
                 />
               </LazyMount>
             </div>
