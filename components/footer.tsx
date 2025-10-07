@@ -84,17 +84,7 @@ export default function Footer() {
             © {new Date().getFullYear()} Centreville Robotics Team. All rights
             reserved.
           </p>
-          <p className="text-xs">
-            Website designed and developed by{" "}
-            <Link
-              className="link"
-              href="https://www.linkedin.com/in/rishan-reddy"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Rishan Reddy
-            </Link>
-          </p>
+          {/* Website developed by Rishan Reddy - https://www.linkedin.com/in/rishan-reddy */}
         </div>
       </div>
     </footer>
