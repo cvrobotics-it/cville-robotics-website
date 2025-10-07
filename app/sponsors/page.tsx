@@ -6,59 +6,111 @@ import SponsorshipCta from "@/components/sponsorship-cta";
 const sponsors = [
   {
     name: "Leidos",
-    logo: "https://images.squarespace-cdn.com/content/v1/57b0d73ce58c62414be1ae5e/1c820748-9e1c-4983-bf99-b0a27c3c9000/leidos.png?format=1000w",
-    description: "Thank you Mrs. Nelson!",
+    logo: "/sponsors/Leidos-logo-horz-full-rgb.svg",
+    thanks: "Special thanks to Mrs. Nelson!",
     link: "https://www.leidos.com/",
   },
   {
     name: "Centreville Dance Academy",
-    logo: "https://images.squarespace-cdn.com/content/v1/57b0d73ce58c62414be1ae5e/7d8362ec-538b-4151-bcd8-bad6eeccbbb4/cda_logo.png?format=1000w",
-    description: "Thank you Mr. Taylor!",
+    logo: "/sponsors/Centreville_Dance_Logo.png",
+    thanks: "Special thanks to Mr. Taylor!",
     link: "https://centrevilledance.com/",
   },
   {
     name: "Mermaid Water & Plumbing",
-    logo: "https://images.squarespace-cdn.com/content/v1/57b0d73ce58c62414be1ae5e/53c8a935-2b08-45d4-8a0f-e9a5cf86c67a/plumbingsponsor.png?format=1000w",
-    description: "Thank you!",
+    logo: "/sponsors/Mermaid-Water-Logo-High-Resolution.png",
+    thanks: "Thank you!",
     link: "https://www.watersoftenersystems.com/",
   },
   {
     name: "General Dynamics Information Technology",
-    logo: "https://images.squarespace-cdn.com/content/v1/57b0d73ce58c62414be1ae5e/0b18be65-f946-4fd9-b593-f38ee3ad64c5/gdit.jpg?format=1000w",
-    description: "Thank you Mr. Connelly and Mr. Raheja!",
-    link: "#",
+    logo: "/sponsors/gdit-logo.png",
+    thanks: "Special thanks to Mr. Connelly and Mr. Raheja!",
+    link: "https://gdit.com/",
+  },
+  {
+    name: "Tria",
+    logo: "/sponsors/Copy of Tria Logo_Blue.png",
+    thanks: "Thank you!",
+    link: "https://triafed.com/",
+  },
+  {
+    name: "Rosemary's Thyme Bistro",
+    logo: "/sponsors/rosemarys_thyme_logo.svg",
+    thanks: "Thank you!",
+    link: "https://www.rosemarysthymebistro.com/",
   },
 ];
 
 export default function Sponsors() {
   return (
-    <section className="py-16 bg-base-100">
+    <section className="py-20 bg-gradient-to-br from-base-100 to-base-200">
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl font-bold text-center mb-12">Sponsors</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="text-center mb-16">
+          <h1 className="text-5xl font-bold text-primary mb-4">Our Sponsors</h1>
+          <p className="text-xl text-base-content max-w-3xl mx-auto leading-relaxed">
+            We are grateful to our amazing sponsors who make our robotics
+            program possible. Their support enables us to compete, learn, and
+            inspire the next generation of engineers.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
           {sponsors.map((sponsor, index) => (
             <div
               key={index}
-              className="flex flex-col items-center md:items-start text-center md:text-left"
+              className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100/50 overflow-hidden"
             >
-              <Image
-                src={sponsor.logo}
-                width={240}
-                height={160}
-                alt={sponsor.name}
-                className="w-48 h-auto mb-4"
-              />
-              <h3 className="text-xl font-bold text-primary mb-2 uppercase">
-                {sponsor.name}
-              </h3>
-              <p className="text-base-content mb-4">{sponsor.description}</p>
-              <Link
-                href={sponsor.link}
-                className="btn btn-secondary"
-                target="_blank"
-              >
-                Learn More
-              </Link>
+              <div className="p-8">
+                {/* Logo Container */}
+                <div className="flex justify-center mb-6">
+                  <div className="w-56 h-32 relative flex items-center justify-center bg-gray-50/50 rounded-lg p-4">
+                    <Image
+                      src={sponsor.logo}
+                      fill
+                      alt={`${sponsor.name} logo`}
+                      className="object-contain transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                </div>
+
+                {/* Company Name */}
+                <h3 className="text-2xl font-bold text-gray-800 text-center mb-6">
+                  {sponsor.name}
+                </h3>
+
+                {/* Thanks Message */}
+                <div className="bg-gradient-to-r from-primary/5 to-primary/10 rounded-xl p-4 mb-6">
+                  <p className="text-primary font-medium text-center">
+                    {sponsor.thanks}
+                  </p>
+                </div>
+
+                {/* Visit Website Button */}
+                <div className="flex justify-center">
+                  <Link
+                    href={sponsor.link}
+                    className="inline-flex items-center px-6 py-3 bg-primary hover:bg-primary-focus text-white font-medium rounded-lg transition-colors duration-200 hover:shadow-lg"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <svg
+                      className="w-4 h-4 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
+                    </svg>
+                    Visit Website
+                  </Link>
+                </div>
+              </div>
             </div>
           ))}
         </div>
