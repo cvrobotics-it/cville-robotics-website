@@ -9,10 +9,10 @@ export default function InfoCards() {
           <div className="card lg:card-side bg-base-100 shadow-xl">
             <figure className="lg:w-1/2">
               <Image
-                src="https://images.squarespace-cdn.com/content/v1/57b0d73ce58c62414be1ae5e/1679320920363-6PX9IS8A6E4VKFEBMBMN/IMG-3868.jpg"
+                src="/assets/team-photo.png"
                 alt="Team photo with robotics display"
                 width={600}
-                height={400}
+                height={300}
                 className="w-full h-full object-cover"
               />
             </figure>
@@ -54,10 +54,10 @@ export default function InfoCards() {
             </div>
             <figure className="lg:w-1/2">
               <Image
-                src="https://images.squarespace-cdn.com/content/v1/57b0d73ce58c62414be1ae5e/1542597493770-QA9L9W0ECQJ6YN7VYRW2/WhatsApp+Image+2018-08-09+at+9.16.24+PM.jpeg"
+                src="/assets/locked-in.png"
                 alt="Students working on robotics projects"
                 width={600}
-                height={400}
+                height={600}
                 className="w-full h-full object-cover"
               />
             </figure>

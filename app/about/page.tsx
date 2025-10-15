@@ -8,7 +8,7 @@ export default function AboutUs() {
         {/* Hero Image */}
         <div className="mb-12">
           <Image
-            src="https://images.squarespace-cdn.com/content/v1/57b0d73ce58c62414be1ae5e/1509823698783-W8CMR9ADNN8GUI2W2WR5/Team+Photo+from+St.+Louis.jpg?format=2500w"
+            src="/assets/team-photo.png"
             alt="Centreville Robotics Team at the 2017 Saint Louis World Championship"
             className="w-full rounded-lg"
             width={2500}
