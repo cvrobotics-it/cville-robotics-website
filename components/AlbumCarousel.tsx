@@ -3,8 +3,12 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
-import useEmblaCarousel from "embla-carousel-react";
-import { EmblaOptionsType } from "embla-carousel";
+import useEmblaCarousel, {
+  type UseEmblaCarouselType,
+} from "embla-carousel-react";
+
+type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
+type CarouselOptions = UseCarouselParameters[0];
 import Autoplay from "embla-carousel-autoplay";
 import type { Album } from "@/lib/gallery/types";
 import clsx from "clsx";
@@ -39,7 +43,7 @@ export default function AlbumCarousel({
 }) {
   const reduceMotion = usePrefersReducedMotion();
 
-  const options: EmblaOptionsType = {
+  const options: CarouselOptions = {
     loop: true,
     align: "start",
     containScroll: "trimSnaps",

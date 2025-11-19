@@ -14,10 +14,6 @@ export default function AboutUs() {
             width={2500}
             height={1667}
           />
-          <p className="text-sm text-center mt-2 text-base-content">
-            Centreville Robotics, now Aegis Robotics, at the 2017 Saint Louis
-            World Championship from April 26th to 29th.
-          </p>
         </div>
 
         {/* Mission Section */}

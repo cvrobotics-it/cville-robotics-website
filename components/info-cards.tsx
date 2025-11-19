@@ -86,7 +86,7 @@ export default function InfoCards() {
               <div className="card-actions justify-end">
                 <Link
                   href={
-                    "https://sites.google.com/view/cvilleroboticsparentpage/home"
+                    "https://sites.google.com/centrevillerobotics.net/parents/"
                   }
                   className="btn btn-primary"
                   target="_blank"

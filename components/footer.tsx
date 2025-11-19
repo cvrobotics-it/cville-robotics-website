@@ -1,4 +1,4 @@
-import { Instagram } from "lucide-react";
+import { SocialIcon } from "react-social-icons";
 import Link from "next/link";
 
 export default function Footer() {
@@ -10,16 +10,8 @@ export default function Footer() {
           <div className="flex flex-col items-start">
             <h3 className="text-lg font-bold mb-4">Follow Us</h3>
             <div className="flex gap-4">
-              <Link
-                href="https://www.instagram.com/cvillerobotics"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-ghost btn-circle"
-                aria-label="Instagram"
-              >
-                <Instagram className="w-6 h-6" />
-              </Link>
-              {/* Add more social media icons as needed */}
+              <SocialIcon url="https://www.instagram.com/cvillerobotics/" />
+              <SocialIcon url="https://www.tiktok.com/@centreville.robotics" />
             </div>
           </div>
 
