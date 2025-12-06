@@ -34,8 +34,8 @@ export default function FundraiserModal({
 
     // Check if user has already seen THIS specific campaign
     const seenCampaignKey = `hasSeenFundraiser_${campaignId}`;
-    // const hasSeenModal = sessionStorage.getItem(seenCampaignKey);
-    const hasSeenModal = false; // For testing purposes, always show
+    const hasSeenModal = sessionStorage.getItem(seenCampaignKey);
+    // const hasSeenModal = false; // For testing purposes, always show
 
     if (!hasSeenModal) {
       // Show modal after a short delay for better UX
