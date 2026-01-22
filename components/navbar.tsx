@@ -117,6 +117,12 @@ export default function Navbar() {
             <Link href="/join" className="btn btn-primary ml-2">
               Join Robotics
             </Link>
+            <Link
+              href="https://www.paypal.com/ncp/payment/SCU42N7GPMVRL"
+              className="btn btn-secondary ml-2"
+            >
+              Donate Now
+            </Link>
           </nav>
 
           <div className="lg:hidden">
@@ -205,6 +211,11 @@ export default function Navbar() {
               <li>
                 <Link href="/join" className="btn btn-primary mt-2">
                   Join Robotics
+                </Link>
+              </li>
+              <li>
+                <Link href="" className="btn btn-secondary mt-2">
+                  Donate Now
                 </Link>
               </li>
             </ul>

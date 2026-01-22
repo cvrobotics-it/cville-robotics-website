@@ -57,7 +57,7 @@ export default function AlbumCarousel({
             stopOnMouseEnter: true,
             stopOnInteraction: false,
           }),
-        ]
+        ],
   );
 
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -75,17 +75,17 @@ export default function AlbumCarousel({
 
   const scrollTo = useCallback(
     (i: number) => emblaApi?.scrollTo(i),
-    [emblaApi]
+    [emblaApi],
   );
 
   // pick a sensible sizes attr based on maxWidth (so Next/Image picks smaller files)
   const sizesByMax = maxWidth.includes("max-w-sm")
     ? "(max-width: 768px) 100vw, 480px"
     : maxWidth.includes("max-w-md")
-    ? "(max-width: 768px) 100vw, 640px"
-    : maxWidth.includes("max-w-lg")
-    ? "(max-width: 768px) 100vw, 768px"
-    : "(max-width: 768px) 100vw, 900px";
+      ? "(max-width: 768px) 100vw, 640px"
+      : maxWidth.includes("max-w-lg")
+        ? "(max-width: 768px) 100vw, 768px"
+        : "(max-width: 768px) 100vw, 900px";
 
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -95,7 +95,7 @@ export default function AlbumCarousel({
     setLightboxIndex((i) => (i === null ? 0 : (i + 1) % album.images.length));
   const prevLightbox = () =>
     setLightboxIndex((i) =>
-      i === null ? 0 : (i - 1 + album.images.length) % album.images.length
+      i === null ? 0 : (i - 1 + album.images.length) % album.images.length,
     );
 
   useEffect(() => {
@@ -107,6 +107,7 @@ export default function AlbumCarousel({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lightboxIndex]);
 
   return (
@@ -124,7 +125,7 @@ export default function AlbumCarousel({
                   blurDataURL={img.blurDataURL}
                   className={clsx(
                     "rounded-xl cursor-zoom-in",
-                    coverFit === "contain" ? "object-contain" : "object-cover"
+                    coverFit === "contain" ? "object-contain" : "object-cover",
                   )}
                   priority={i === 0}
                   loading={i === 0 ? "eager" : "lazy"}
@@ -164,7 +165,7 @@ export default function AlbumCarousel({
               "h-1.5 w-1.5 rounded-full transition",
               i === selectedIndex
                 ? "bg-primary"
-                : "bg-neutral/30 hover:bg-neutral/60"
+                : "bg-neutral/30 hover:bg-neutral/60",
             )}
           />
         ))}

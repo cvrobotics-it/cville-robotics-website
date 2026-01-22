@@ -34,12 +34,6 @@ const sponsors = [
     thanks: "Thank you!",
     link: "https://triafed.com/",
   },
-  {
-    name: "Rosemary's Thyme Bistro",
-    logo: "/sponsors/rosemarys_thyme_logo.svg",
-    thanks: "Thank you!",
-    link: "https://www.rosemarysthymebistro.com/",
-  },
 ];
 
 export default function Sponsors() {
