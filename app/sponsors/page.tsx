@@ -43,6 +43,12 @@ const sponsors: Sponsor[] = [
     link: "https://triafed.com/",
   },
   {
+    name: "Ascent Educational Services",
+    logo: "/sponsors/Ascentlogo.png",
+    thanks: "Thank you!",
+    link: "https://www.ascent-educational-consulting.com/",
+  },
+  {
     name: "Support Our Mission",
     logo: "/logo.webp",
     thanks: "Every contribution powers innovation",
