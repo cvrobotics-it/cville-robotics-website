@@ -1,12 +1,6 @@
 import type { Manifest, Album, ImageMeta } from "@/lib/gallery/types";
 
 export async function getManifest(): Promise<Manifest> {
-  if (process.env.NODE_ENV === "production") {
-    return (await import("@/generated/photos-manifest.json"))
-      .default as Manifest;
-  }
-
-  // DEV: quick scan (no thumbs/blur/size); we’ll render with `fill`
   const { promises: fs } = await import("node:fs");
   const path = await import("node:path");
 
@@ -27,6 +21,12 @@ export async function getManifest(): Promise<Manifest> {
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)+/g, "");
 
+  try {
+    await fs.access(PHOTOS_DIR);
+  } catch {
+    return { albums: [] };
+  }
+
   const entries = await fs.readdir(PHOTOS_DIR, { withFileTypes: true });
   const albums: Album[] = [];
 
@@ -44,7 +44,7 @@ export async function getManifest(): Promise<Manifest> {
         const src = `/photos/${encodeURIComponent(name)}/${encodeURIComponent(
           f.name
         )}`;
-        images.push({ src, width: 0, height: 0, thumb: src }); // dev fallback
+        images.push({ src, width: 0, height: 0, thumb: src });
       }
       if (f.isDirectory()) {
         const sub = path.join(dir, f.name);

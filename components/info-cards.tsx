@@ -25,7 +25,7 @@ export default function InfoCards() {
                 based out of Centreville Highschool.
               </p>
               <div className="card-actions justify-end">
-                <Link href={"/about"} className="btn btn-primary">
+                <Link href={"/about"} prefetch={false} className="btn btn-primary">
                   Learn More
                 </Link>
               </div>
@@ -47,7 +47,7 @@ export default function InfoCards() {
                 robotics.
               </p>
               <div className="card-actions justify-end">
-                <Link href={"aegis"} className="btn btn-primary">
+                <Link href={"aegis"} prefetch={false} className="btn btn-primary">
                   Learn More
                 </Link>
               </div>

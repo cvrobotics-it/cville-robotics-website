@@ -1,6 +1,8 @@
 import { SocialIcon } from "react-social-icons";
 import Link from "next/link";
 
+import NewsletterSignup from "@/components/newsletter-signup";
+
 export default function Footer() {
   return (
     <footer className="bg-neutral text-neutral-content">
@@ -21,26 +23,7 @@ export default function Footer() {
             <p className="mb-4 text-sm">
               Stay updated with our latest news and updates.
             </p>
-            <form className="w-full max-w-md">
-              <div className="form-control">
-                <div className="join">
-                  <input
-                    type="email"
-                    placeholder="Your Email Address"
-                    className="input input-bordered join-item w-full"
-                    aria-label="Email Address"
-                    required
-                  />
-                  <button
-                    type="submit"
-                    className="btn btn-primary join-item"
-                    aria-label="Sign Up"
-                  >
-                    Subscribe
-                  </button>
-                </div>
-              </div>
-            </form>
+            <NewsletterSignup />
           </div>
 
           {/* Quick Links */}
@@ -48,22 +31,22 @@ export default function Footer() {
             <h3 className="text-lg font-bold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="link link-hover">
+                <Link href="/" prefetch={false} className="link link-hover">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="link link-hover">
+                <Link href="/about" prefetch={false} className="link link-hover">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="link link-hover">
+                <Link href="/contact" prefetch={false} className="link link-hover">
                   Contact
                 </Link>
               </li>
               <li>
-                <Link href="/outreach" className="link link-hover">
+                <Link href="/outreach" prefetch={false} className="link link-hover">
                   Outreach
                 </Link>
               </li>

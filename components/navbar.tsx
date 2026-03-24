@@ -2,19 +2,24 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { CalendarIcon } from "lucide-react";
+import { CalendarDays, ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 type NavItem = { label: string; href: string };
+type NavGroup = { label: string; items: NavItem[] };
 
 const primaryLinks: NavItem[] = [
   { label: "Home", href: "/" },
-  { label: "Sponsors", href: "/sponsors" },
   { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-  { label: "FTC Teams", href: "/ftc" },
+  { label: "Events", href: "/events" },
   { label: "Gallery", href: "/gallery" },
+  { label: "Newsletter", href: "/newsletter" },
+];
+
+const programsLinks: NavItem[] = [
+  { label: "FTC Teams", href: "/ftc" },
+  { label: "Join Robotics", href: "/join" },
 ];
 
 const outreachLinks: NavItem[] = [
@@ -23,33 +28,83 @@ const outreachLinks: NavItem[] = [
   { label: "Calendar", href: "/outreach/calendar" },
 ];
 
+const secondaryLinks: NavItem[] = [
+  { label: "Contact", href: "/contact" },
+  { label: "Sponsors", href: "/sponsors" },
+];
+
+const mobileMenuGroups: (NavItem | NavGroup)[] = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Events", href: "/events" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Newsletter", href: "/newsletter" },
+  { 
+    label: "Programs", 
+    items: programsLinks
+  },
+  { 
+    label: "Outreach", 
+    items: outreachLinks
+  },
+  { label: "Calendar", href: "/outreach/calendar" },
+  { label: "Contact", href: "/contact" },
+  { label: "Sponsors", href: "/sponsors" },
+];
+
 export default function Navbar() {
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   useEffect(() => {
-    if (open) {
+    if (mobileOpen) {
       document.body.classList.add("overflow-hidden");
       closeBtnRef.current?.focus();
     } else {
       document.body.classList.remove("overflow-hidden");
     }
     return () => document.body.classList.remove("overflow-hidden");
-  }, [open]);
+  }, [mobileOpen]);
 
+  // Close mobile menu and dropdowns when route changes
   useEffect(() => {
-    setOpen(false);
+    setMobileOpen(false);
+    setOpenDropdown(null);
   }, [pathname]);
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (openDropdown) {
+        const dropdownEl = dropdownRefs.current[openDropdown];
+        if (dropdownEl && !dropdownEl.contains(event.target as Node)) {
+          setOpenDropdown(null);
+        }
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [openDropdown]);
 
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname?.startsWith(href);
 
+  const isGroupActive = (items: NavItem[]) =>
+    items.some((item) => isActive(item.href));
+
+  const toggleDropdown = (name: string) => {
+    setOpenDropdown(openDropdown === name ? null : name);
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-base-100/80 backdrop-blur border-b border-base-300">
+    <header className="sticky top-0 z-[60] bg-base-100/95 backdrop-blur-md border-b border-base-300 shadow-sm">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 btn btn-sm"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 btn btn-sm z-[70]"
       >
         Skip to content
       </a>
@@ -58,6 +113,7 @@ export default function Navbar() {
           <div className="flex-1">
             <Link
               href="/"
+              prefetch={false}
               aria-label="Go to homepage"
               className="flex items-center gap-2"
             >
@@ -67,18 +123,19 @@ export default function Navbar() {
                 width={180}
                 height={40}
                 priority
-                sizes="(max-width: 1024px) 40vw, 180px"
-                className="h-12 w-auto"
+                sizes="(max-width: 1279px) 50vw, 180px"
+                className="h-11 w-auto xl:h-12"
               />
             </Link>
           </div>
 
-          <nav className="hidden lg:flex items-center gap-2">
-            <ul className="menu menu-horizontal px-0">
+          <nav className="hidden xl:flex items-center gap-1.5">
+            <ul className="menu menu-horizontal px-0 gap-0.5">
               {primaryLinks.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
+                    prefetch={false}
                     className={isActive(item.href) ? "active" : ""}
                     aria-current={isActive(item.href) ? "page" : undefined}
                   >
@@ -86,55 +143,125 @@ export default function Navbar() {
                   </Link>
                 </li>
               ))}
-              <li>
-                <details className="dropdown dropdown-end">
-                  <summary
-                    className={
-                      pathname?.startsWith("/outreach") ? "active" : ""
-                    }
-                  >
-                    Outreach
-                  </summary>
-                  <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-56 p-2 shadow mt-2">
-                    {outreachLinks.map((o) => (
-                      <li key={o.href}>
-                        <Link href={o.href}>{o.label}</Link>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-              </li>
-              <li>
-                <Link
-                  href="/outreach/calendar"
-                  aria-label="Calendar"
-                  title="Calendar"
-                >
-                  <CalendarIcon className="w-5 h-5" />
-                </Link>
-              </li>
             </ul>
-            <Link href="/join" className="btn btn-primary ml-2">
-              Join Robotics
-            </Link>
+              
+            {/* Programs Dropdown */}
+            <div className="dropdown dropdown-hover" ref={(el) => {
+              dropdownRefs.current.programs = el;
+            }}>
+              <button
+                type="button"
+                onClick={() => toggleDropdown("programs")}
+                className={`btn btn-ghost rounded-btn gap-1 ${isGroupActive(programsLinks) ? "btn-active" : ""}`}
+                aria-label="Programs menu"
+                aria-expanded={openDropdown === "programs"}
+                tabIndex={0}
+              >
+                Programs
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              {openDropdown === "programs" && (
+                <ul 
+                  className="menu dropdown-content bg-base-100 rounded-box z-[100] w-52 p-2 shadow-xl border border-base-300 mt-1 opacity-100 transition-opacity duration-200"
+                >
+                  {programsLinks.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        prefetch={false}
+                        className={isActive(item.href) ? "active" : ""}
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            {/* Outreach Dropdown */}
+            <div className="dropdown dropdown-hover" ref={(el) => {
+              dropdownRefs.current.outreach = el;
+            }}>
+              <button
+                type="button"
+                onClick={() => toggleDropdown("outreach")}
+                className={`btn btn-ghost rounded-btn gap-1 ${isGroupActive(outreachLinks) ? "btn-active" : ""}`}
+                aria-label="Outreach menu"
+                aria-expanded={openDropdown === "outreach"}
+                tabIndex={0}
+              >
+                Outreach
+                <ChevronDown className="w-4 h-4" />
+              </button>
+              {openDropdown === "outreach" && (
+                <ul 
+                  className="menu dropdown-content bg-base-100 rounded-box z-[100] w-52 p-2 shadow-xl border border-base-300 mt-1 opacity-100 transition-opacity duration-200"
+                >
+                  {outreachLinks.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        prefetch={false}
+                        className={isActive(item.href) ? "active" : ""}
+                      >
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
             <Link
-              href="https://www.paypal.com/ncp/payment/SCU42N7GPMVRL"
-              className="btn btn-secondary ml-2"
+              href="/outreach/calendar"
+              prefetch={false}
+              className={`btn btn-ghost btn-square ${isActive("/outreach/calendar") ? "btn-active" : ""}`}
+              aria-label="Calendar"
+              title="Calendar"
             >
-              Donate Now
+              <CalendarDays className="w-5 h-5" />
             </Link>
+
+            <ul className="menu menu-horizontal px-0 gap-0.5">
+              {secondaryLinks.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    prefetch={false}
+                    className={isActive(item.href) ? "active" : ""}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            
+            <div className="flex items-center gap-2 ml-2">
+              <Link href="/join" prefetch={false} className="btn btn-primary btn-sm">
+                Join
+              </Link>
+              <Link
+                href="https://www.paypal.com/ncp/payment/SCU42N7GPMVRL"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-secondary btn-sm"
+              >
+                Donate
+              </Link>
+            </div>
           </nav>
 
-          <div className="lg:hidden">
+          <div className="xl:hidden">
             <button
               type="button"
-              className="btn btn-ghost"
+              className="btn btn-ghost btn-square"
               aria-label="Open menu"
-              aria-expanded={open}
+              aria-expanded={mobileOpen}
               aria-controls="mobile-menu"
-              onClick={() => setOpen(true)}
+              onClick={() => setMobileOpen(true)}
             >
-              {/* Hamburger icon */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -143,8 +270,10 @@ export default function Navbar() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="w-5 h-5"
+                className="w-6 h-6"
+                aria-hidden="true"
               >
+                <title>Menu</title>
                 <line x1="3" y1="6" x2="21" y2="6"></line>
                 <line x1="3" y1="12" x2="21" y2="12"></line>
                 <line x1="3" y1="18" x2="21" y2="18"></line>
@@ -154,26 +283,25 @@ export default function Navbar() {
         </div>
       </div>
 
-      {open && (
+      {mobileOpen && (
         <div
           id="mobile-menu"
           role="dialog"
           aria-modal="true"
           className="fixed inset-0 z-[60] bg-base-100"
           onKeyDown={(e) => {
-            if (e.key === "Escape") setOpen(false);
+            if (e.key === "Escape") setMobileOpen(false);
           }}
         >
           <div className="container mx-auto px-4 py-4 flex items-center justify-between border-b border-base-300">
-            <span className="font-semibold">Menu</span>
+            <span className="font-semibold text-lg">Menu</span>
             <button
               ref={closeBtnRef}
               type="button"
-              className="btn btn-ghost"
+              className="btn btn-ghost btn-square"
               aria-label="Close menu"
-              onClick={() => setOpen(false)}
+              onClick={() => setMobileOpen(false)}
             >
-              {/* X icon */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -182,39 +310,65 @@ export default function Navbar() {
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                className="w-5 h-5"
+                className="w-6 h-6"
+                aria-hidden="true"
               >
+                <title>Close</title>
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
               </svg>
             </button>
           </div>
-          <nav className="container mx-auto px-4 py-4">
+          <nav className="container mx-auto px-4 py-4 overflow-y-auto max-h-[calc(100vh-80px)]">
             <ul className="menu menu-lg bg-base-100">
-              {primaryLinks.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className={isActive(item.href) ? "active" : ""}
-                    aria-current={isActive(item.href) ? "page" : undefined}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-              <li className="menu-title">Outreach</li>
-              {outreachLinks.map((o) => (
-                <li key={o.href}>
-                  <Link href={o.href}>{o.label}</Link>
-                </li>
-              ))}
-              <li>
-                <Link href="/join" className="btn btn-primary mt-2">
+              {mobileMenuGroups.map((item) => {
+                if ("items" in item) {
+                  return (
+                    <li key={item.label}>
+                      <details>
+                        <summary className="font-semibold">{item.label}</summary>
+                        <ul>
+                          {item.items.map((subItem) => (
+                            <li key={subItem.href}>
+                              <Link
+                                href={subItem.href}
+                                prefetch={false}
+                                className={isActive(subItem.href) ? "active" : ""}
+                              >
+                                {subItem.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                    </li>
+                  );
+                }
+                return (
+                  <li key={item.href}>
+                    <Link
+                      href={item.href}
+                      prefetch={false}
+                      className={isActive(item.href) ? "active" : ""}
+                      aria-current={isActive(item.href) ? "page" : undefined}
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                );
+              })}
+              <li className="mt-4">
+                <Link href="/join" prefetch={false} className="btn btn-primary">
                   Join Robotics
                 </Link>
               </li>
-              <li>
-                <Link href="" className="btn btn-secondary mt-2">
+              <li className="mt-2">
+                <Link
+                  href="https://www.paypal.com/ncp/payment/SCU42N7GPMVRL"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-secondary"
+                >
                   Donate Now
                 </Link>
               </li>
