@@ -1,6 +1,8 @@
 import { ImagesIcon } from '@sanity/icons'
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
+import { CoverImageSelector } from '../components/CoverImageSelector'
+
 export const galleryAlbumType = defineType({
   name: 'galleryAlbum',
   title: 'Gallery Album',
@@ -58,26 +60,13 @@ export const galleryAlbumType = defineType({
       rows: 4,
     }),
     defineField({
-      name: 'coverImage',
-      title: 'Cover image',
-      type: 'image',
-      options: { hotspot: true },
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alt text',
-          type: 'string',
-        }),
-      ],
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
       name: 'photos',
       title: 'Photos',
       type: 'array',
       of: [
         defineArrayMember({
           type: 'object',
+          name: 'albumPhoto',
           fields: [
             defineField({
               name: 'image',
@@ -123,20 +112,41 @@ export const galleryAlbumType = defineType({
       ],
       validation: (rule) => rule.min(1),
     }),
+    defineField({
+      name: 'coverImageIndex',
+      title: 'Cover image',
+      description: 'Select which photo from the album to use as the cover (defaults to first photo)',
+      type: 'number',
+      initialValue: 0,
+      components: {
+        input: CoverImageSelector,
+      },
+      validation: (rule) => 
+        rule.min(0).custom((value, context) => {
+          const photos = (context.document?.photos as any[]) || []
+          if (value !== undefined && value >= photos.length) {
+            return `Cover image index must be less than ${photos.length} (number of photos)`
+          }
+          return true
+        }),
+    }),
   ],
   preview: {
     select: {
       title: 'title',
-      media: 'coverImage',
+      photos: 'photos',
+      coverImageIndex: 'coverImageIndex',
       subtitle: 'category',
       seasonYear: 'seasonYear',
     },
     prepare(selection) {
-      const { title, media, subtitle, seasonYear } = selection
+      const { title, photos, coverImageIndex, subtitle, seasonYear } = selection
+      const index = coverImageIndex || 0
+      const coverPhoto = photos?.[index]
 
       return {
         title,
-        media,
+        media: coverPhoto?.image,
         subtitle: [subtitle, seasonYear].filter(Boolean).join(' • '),
       }
     },

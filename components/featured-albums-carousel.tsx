@@ -52,8 +52,10 @@ export default function FeaturedAlbumsCarousel({ albums }: FeaturedAlbumsCarouse
       <div className="overflow-hidden rounded-[1.75rem] border border-base-300 bg-base-100 shadow-xl" ref={emblaRef}>
         <div className="flex">
           {albums.map((album) => {
-            const coverImage = album.coverImage?.asset
-              ? urlFor(album.coverImage).width(1600).height(900).fit("crop").url()
+            const coverIndex = album.coverImageIndex ?? 0
+            const coverPhoto = album.photos[coverIndex]
+            const coverImage = coverPhoto?.image?.asset
+              ? urlFor(coverPhoto.image).width(1600).height(900).fit("crop").url()
               : null;
             const formattedDate = new Date(album.eventDate).toLocaleDateString("en-US", {
               month: "long",
@@ -67,7 +69,7 @@ export default function FeaturedAlbumsCarousel({ albums }: FeaturedAlbumsCarouse
                   {coverImage ? (
                     <Image
                       src={coverImage}
-                      alt={album.coverImage?.alt || album.title}
+                      alt={coverPhoto?.image?.alt || album.title}
                       fill
                       className="object-cover"
                       priority={selectedIndex === albums.indexOf(album)}

@@ -27,7 +27,7 @@ export type SanityGalleryAlbum = {
   eventDate: string
   location?: string
   summary?: string
-  coverImage?: SanityImage
+  coverImageIndex?: number
   photos: SanityGalleryPhoto[]
 }
 

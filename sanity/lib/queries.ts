@@ -9,7 +9,7 @@ export const GALLERY_ALBUM_FIELDS = `{
   eventDate,
   location,
   summary,
-  coverImage,
+  coverImageIndex,
   photos[]{
     _key,
     caption,

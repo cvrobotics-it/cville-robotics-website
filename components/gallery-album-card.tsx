@@ -9,8 +9,10 @@ type GalleryAlbumCardProps = {
 }
 
 export default function GalleryAlbumCard({ album }: GalleryAlbumCardProps) {
-  const coverImage = album.coverImage?.asset
-    ? urlFor(album.coverImage).width(1200).height(900).fit('crop').url()
+  const coverIndex = album.coverImageIndex ?? 0
+  const coverPhoto = album.photos[coverIndex]
+  const coverImage = coverPhoto?.image?.asset
+    ? urlFor(coverPhoto.image).width(1200).height(900).fit('crop').url()
     : null
   const formattedDate = new Date(album.eventDate).toLocaleDateString('en-US', {
     month: 'short',
@@ -25,7 +27,7 @@ export default function GalleryAlbumCard({ album }: GalleryAlbumCardProps) {
           {coverImage ? (
             <Image
               src={coverImage}
-              alt={album.coverImage?.alt || album.title}
+              alt={coverPhoto?.image?.alt || album.title}
               fill
               className="object-cover"
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
