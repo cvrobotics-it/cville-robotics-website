@@ -1,10 +1,9 @@
 import { useCallback } from 'react'
-import { set, unset, type NumberInputProps, type ObjectSchemaType } from 'sanity'
+import { set, unset, useFormValue, type NumberInputProps } from 'sanity'
 
 export function CoverImageSelector(props: NumberInputProps) {
   const { value, onChange, schemaType } = props
-  const parent = (props as any).parent as any
-  const photos = parent?.photos || []
+  const photos = useFormValue(['photos']) as any[] || []
 
   const handleSelect = useCallback(
     (index: number) => {
@@ -57,7 +56,9 @@ export function CoverImageSelector(props: NumberInputProps) {
                   }}
                 >
                   {photo.image?.asset ? (
-                    <div style={{ width: '100%', height: '100%', backgroundColor: '#e5e7eb' }} />
+                    <div style={{ width: '100%', height: '100%', backgroundColor: '#4ade80', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '11px', fontWeight: '600' }} >
+                      ✓ Has Image
+                    </div>
                   ) : (
                     <div
                       style={{
