@@ -6,12 +6,13 @@ import { urlFor } from '@/sanity/lib/image'
 
 const components: PortableTextComponents = {
   block: {
-    h2: ({ children }) => <h2 className="mt-10 text-3xl font-bold text-primary">{children}</h2>,
-    h3: ({ children }) => <h3 className="mt-8 text-2xl font-bold text-base-content">{children}</h3>,
-    normal: ({ children }) => <p className="text-lg leading-8 text-base-content/80">{children}</p>,
+    h2: ({ children }) => <h2>{children}</h2>,
+    h3: ({ children }) => <h3>{children}</h3>,
+    normal: ({ children }) => <p>{children}</p>,
   },
   list: {
-    bullet: ({ children }) => <ul className="list-disc space-y-2 pl-6 text-lg text-base-content/80">{children}</ul>,
+    bullet: ({ children }) => <ul>{children}</ul>,
+    number: ({ children }) => <ol>{children}</ol>,
   },
   types: {
     image: ({ value }) => {
@@ -20,7 +21,7 @@ const components: PortableTextComponents = {
       const imageUrl = urlFor(value).width(1600).fit('max').url()
 
       return (
-        <figure className="space-y-3 overflow-hidden rounded-2xl bg-base-200 p-3">
+        <figure className="not-prose my-8 space-y-3 overflow-hidden rounded-2xl bg-base-200 p-3">
           <Image
             src={imageUrl}
             alt={value.alt || 'Newsletter image'}

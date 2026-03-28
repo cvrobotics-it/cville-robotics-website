@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
 
-import PortableTextRenderer from '@/components/portable-text'
+import ProseableText from '@/components/proseable-text'
 import { getNewsletterIssue, getNewsletterIssues } from '@/lib/newsletter/content'
 import { urlFor } from '@/sanity/lib/image'
 
@@ -67,9 +67,7 @@ export default async function NewsletterIssuePage({ params }: NewsletterIssuePag
         ) : null}
 
         <section className="rounded-[1.75rem] border border-base-300 bg-base-100 p-8 shadow-xl">
-          <div className="prose prose-lg max-w-none">
-            <PortableTextRenderer value={issue.body} />
-          </div>
+          <ProseableText value={issue.body} />
         </section>
       </article>
     </div>
