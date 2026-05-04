@@ -1,6 +1,6 @@
 import { createClient } from '@sanity/client'
 import dotenv from 'dotenv'
-import { resolve } from 'path'
+import { resolve } from 'path';
 
 // Load .env.local from project root
 dotenv.config({ path: resolve(__dirname, '../.env.local') })
