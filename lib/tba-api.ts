@@ -4,13 +4,23 @@ const TBA_API_BASE = "https://www.thebluealliance.com/api/v3";
 const TBA_API_KEY = process.env.TBA_API_KEY || "";
 const EVENT_CACHE_SECONDS = 3600;
 const STATUS_CACHE_SECONDS = 1800;
+const TBA_TIMEOUT_MS = 5000;
 
 // Configuration from environment variables
 const TEAM_NUMBER_RAW = process.env.NEXT_PUBLIC_TEAM_NUMBER || "5243";
-const COMPETITION_YEARS = (process.env.NEXT_PUBLIC_COMPETITION_YEARS || "2026,2025")
+const ROBOTICS_START_YEAR = 2014;
+const CURRENT_SEASON_YEAR = new Date().getFullYear();
+const DEFAULT_COMPETITION_YEARS = Array.from(
+  { length: CURRENT_SEASON_YEAR - ROBOTICS_START_YEAR + 1 },
+  (_, index) => CURRENT_SEASON_YEAR - index
+);
+const CONFIGURED_COMPETITION_YEARS = (process.env.NEXT_PUBLIC_COMPETITION_YEARS || "")
   .split(",")
   .map((y) => parseInt(y.trim(), 10))
   .filter((year) => !Number.isNaN(year));
+const COMPETITION_YEARS = Array.from(new Set([...CONFIGURED_COMPETITION_YEARS, ...DEFAULT_COMPETITION_YEARS])).sort(
+  (a, b) => b - a
+);
 
 export const TEAM_NUMBER = TEAM_NUMBER_RAW;
 export const TEAM_KEY = `frc${TEAM_NUMBER}`;
@@ -33,6 +43,7 @@ export type TBAEvent = {
 
 export type TBAMatch = {
   key: string;
+  event_key: string;
   comp_level: string;
   set_number: number;
   match_number: number;
@@ -76,6 +87,7 @@ async function fetchTBA(endpoint: string, revalidate = EVENT_CACHE_SECONDS) {
   const response = await fetch(`${TBA_API_BASE}${endpoint}`, {
     headers,
     next: { revalidate },
+    signal: AbortSignal.timeout(TBA_TIMEOUT_MS),
   });
 
   if (!response.ok) {
@@ -109,8 +121,16 @@ export async function getTeamEventMatches(teamKey = TEAM_KEY, eventKey: string):
   return fetchTBA(`/team/${teamKey}/event/${eventKey}/matches`);
 }
 
+export async function getTeamMatchesForYear(teamKey = TEAM_KEY, year: number): Promise<TBAMatch[]> {
+  return fetchTBA(`/team/${teamKey}/matches/${year}`);
+}
+
 export async function getTeamEventStatus(teamKey = TEAM_KEY, eventKey: string): Promise<TBAStatus> {
   return fetchTBA(`/team/${teamKey}/event/${eventKey}/status`, STATUS_CACHE_SECONDS);
+}
+
+export async function getTeamEventStatusesForYear(teamKey = TEAM_KEY, year: number): Promise<Record<string, TBAStatus>> {
+  return fetchTBA(`/team/${teamKey}/events/${year}/statuses`, STATUS_CACHE_SECONDS);
 }
 
 export function formatCompLevel(compLevel: string): string {

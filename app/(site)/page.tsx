@@ -1,7 +1,7 @@
 import HeroSection from "@/components/hero";
 import InfoCards from "@/components/info-cards";
 import StemAppreciation from "@/components/stem-appreciation";
-import FundraiserModal from "@/components/fundraiser-modal";
+// import FundraiserModal from "@/components/fundraiser-modal";
 
 export default function Home() {
   return (
@@ -10,8 +10,8 @@ export default function Home() {
       <InfoCards />
       <StemAppreciation />
 
-      {/* 50/50 Raffle Modal */}
-      <FundraiserModal campaignId="5050-raffle-2026">
+      {/* 50/50 Raffle Modal - ended, preserved for future fundraiser reuse. */}
+      {/* <FundraiserModal campaignId="5050-raffle-2026">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-3">
             2026 50/50 Raffle
@@ -26,7 +26,7 @@ export default function Home() {
             Buy 50/50 Raffle Tickets
           </a>
         </div>
-      </FundraiserModal>
+      </FundraiserModal> */}
     </div>
   );
 }

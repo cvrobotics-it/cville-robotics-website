@@ -3,6 +3,7 @@
 const STATBOTICS_API_BASE = "https://api.statbotics.io/v3";
 const STATBOTICS_API_KEY = process.env.STATBOTICS_API_KEY || "";
 const STATBOTICS_CACHE_SECONDS = 3600;
+const STATBOTICS_TIMEOUT_MS = 5000;
 
 type StatboticsEPA = {
   total: number;
@@ -121,6 +122,7 @@ async function fetchStatbotics(endpoint: string, revalidate = STATBOTICS_CACHE_S
   const response = await fetch(`${STATBOTICS_API_BASE}${endpoint}`, {
     headers,
     next: { revalidate },
+    signal: AbortSignal.timeout(STATBOTICS_TIMEOUT_MS),
   });
 
   if (!response.ok) return null;

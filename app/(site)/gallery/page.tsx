@@ -44,7 +44,7 @@ export default async function GalleryPage() {
 
           {currentAlbums.length > 0 ? (
             <div className="space-y-8">
-              {currentAlbums.length > 1 ? <FeaturedAlbumsCarousel albums={currentAlbums.slice(-3)} /> : null}
+              {currentAlbums.length > 1 ? <FeaturedAlbumsCarousel albums={currentAlbums.slice(0, 3)} /> : null}
               <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
                 {currentAlbums.map((album) => (
                   <GalleryAlbumCard key={album._id} album={album} />

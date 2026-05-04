@@ -12,10 +12,16 @@ export default function GalleryArchiveSection({ albums }: GalleryArchiveSectionP
     acc[year].push(album)
     return acc
   }, {})
+  const yearEntries = Object.entries(albumsByYear)
+    .map(([year, yearAlbums]) => [
+      year,
+      [...yearAlbums].sort((a, b) => new Date(b.eventDate).getTime() - new Date(a.eventDate).getTime()),
+    ] as const)
+    .sort(([yearA], [yearB]) => Number(yearB) - Number(yearA))
 
   return (
     <div className="space-y-12">
-      {Object.entries(albumsByYear).map(([year, yearAlbums]) => (
+      {yearEntries.map(([year, yearAlbums]) => (
         <section key={year} className="space-y-5">
           <div className="flex items-center gap-4 border-b border-base-300 pb-3">
             <h3 className="text-2xl font-bold text-primary">{year}</h3>
