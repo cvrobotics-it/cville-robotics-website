@@ -1,5 +1,12 @@
 import Image from "next/image";
 import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  description:
+    "Learn about Centreville Robotics, a non-profit student run organization based out of Centreville High School.",
+};
 
 export default function AboutUs() {
   return (
@@ -8,7 +15,7 @@ export default function AboutUs() {
         {/* Hero Image */}
         <div className="mb-12">
           <Image
-            src="/assets/team-photo.png"
+            src="/assets/team-photo.jpg"
             alt="Centreville Robotics Team at the 2017 Saint Louis World Championship"
             className="w-full rounded-lg"
             width={2500}

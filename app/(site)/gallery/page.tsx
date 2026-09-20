@@ -7,7 +7,7 @@ import GalleryArchiveSection from '@/components/gallery-archive-section'
 import { getGalleryContent } from '@/lib/gallery/content'
 
 export const metadata: Metadata = {
-  title: 'Gallery | Centreville Robotics',
+  title: 'Gallery',
   description: 'Browse current team photos and our archived gallery from past robotics seasons and events.',
 }
 

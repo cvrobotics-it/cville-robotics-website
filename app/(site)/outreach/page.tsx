@@ -1,4 +1,11 @@
 import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Outreach Data",
+  description:
+    "Explore Centreville Robotics' community outreach data and program impact.",
+};
 
 export default function Outreach() {
   return (

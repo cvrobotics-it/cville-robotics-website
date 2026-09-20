@@ -1,6 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Team Aegis",
+  description:
+    "Meet Team Aegis, Centreville Robotics' FIRST Robotics Competition team, and our competition history.",
+};
 
 const competitionHistory = [
   {
@@ -103,6 +110,7 @@ export default function TeamHistory() {
           <Link
             href="https://www.thebluealliance.com/team/5243"
             target="_blank"
+            rel="noopener noreferrer"
             className="link link-primary"
           >
             Visit our Blue Alliance page

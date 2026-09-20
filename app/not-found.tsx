@@ -1,10 +1,15 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Page Not Found",
+};
 
 function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-base-200 text-center">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-base-200 text-center px-4">
       <h1 className="text-6xl font-bold text-error">404</h1>
       <p className="mt-4 text-2xl text-base-content">
         Oops! It seems you&apos;ve taken a wrong turn on our robotics field.
@@ -17,11 +22,11 @@ function NotFound() {
         and get back on track.
       </p>
       <Image
-        width={200}
-        height={300}
-        src="https://picsum.photos/200/300"
-        alt="Lost Robot"
-        className="w-64 h-64 mt-6"
+        width={160}
+        height={160}
+        src="/logo.webp"
+        alt="Centreville Robotics logo"
+        className="w-40 h-40 mt-8 object-contain"
       />
       <Link href="/" className="btn btn-primary mt-6">
         Back to Home

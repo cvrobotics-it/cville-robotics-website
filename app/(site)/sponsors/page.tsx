@@ -1,8 +1,15 @@
 import React from "react";
+import type { Metadata } from "next";
 
 import SponsorCard from "@/components/SponsorCard";
 import SponsorshipCta from "@/components/sponsorship-cta";
 import { getSponsors } from "@/lib/sponsors/content";
+
+export const metadata: Metadata = {
+  title: "Sponsors",
+  description:
+    "Meet the sponsors who make Centreville Robotics' program possible.",
+};
 
 type Sponsor = {
   name: string;
