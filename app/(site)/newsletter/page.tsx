@@ -4,7 +4,7 @@ import NewsletterCard from '@/components/NewsletterCard'
 import { getNewsletterIssues } from '@/lib/newsletter/content'
 
 export const metadata: Metadata = {
-  title: 'Newsletter | Centreville Robotics',
+  title: 'Newsletter',
   description: 'Weekly updates, team news, and highlights from Centreville Robotics.',
 }
 

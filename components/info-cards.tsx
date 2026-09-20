@@ -1,5 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
+import { CheckCircle2, ExternalLink } from "lucide-react";
+
+const parentResources = [
+  "Forms",
+  "Contact",
+  "Sponsorship",
+  "Join Team",
+  "Volunteer",
+];
 
 export default function InfoCards() {
   return (
@@ -9,7 +18,7 @@ export default function InfoCards() {
           <div className="card lg:card-side bg-base-100 shadow-xl">
             <figure className="lg:w-1/2">
               <Image
-                src="/assets/team-photo.png"
+                src="/assets/team-photo.jpg"
                 alt="Team photo with robotics display"
                 width={600}
                 height={300}
@@ -25,7 +34,11 @@ export default function InfoCards() {
                 based out of Centreville Highschool.
               </p>
               <div className="card-actions justify-end">
-                <Link href={"/about"} prefetch={false} className="btn btn-primary">
+                <Link
+                  href={"/about"}
+                  prefetch={false}
+                  className="btn btn-primary"
+                >
                   Learn More
                 </Link>
               </div>
@@ -47,7 +60,11 @@ export default function InfoCards() {
                 robotics.
               </p>
               <div className="card-actions justify-end">
-                <Link href={"aegis"} prefetch={false} className="btn btn-primary">
+                <Link
+                  href={"aegis"}
+                  prefetch={false}
+                  className="btn btn-primary"
+                >
                   Learn More
                 </Link>
               </div>
@@ -76,22 +93,46 @@ export default function InfoCards() {
                 className="w-full h-full object-cover"
               />
             </figure>
-            <div className="card-body lg:w-1/2">
+            <div className="card-body gap-5 lg:w-1/2 lg:p-12 xl:p-14">
               <h2 className="card-title text-4xl font-bold text-primary">
-                Parent&apos;s Corner
+                Parents&apos; Corner
               </h2>
-              <p className="text-lg">
-                Check out our website for Centreville Robotics Parent&apos;s!
+              <p className="max-w-xl text-lg leading-relaxed">
+                Find the information your family needs throughout the robotics
+                season, all organized in one place.
               </p>
-              <div className="card-actions justify-end">
+
+              <ul
+                className="grid gap-x-6 gap-y-3 sm:grid-cols-2"
+                aria-label="Resources available in the parent hub"
+              >
+                {parentResources.map((resource) => (
+                  <li key={resource} className="flex items-start gap-2.5">
+                    <CheckCircle2
+                      aria-hidden="true"
+                      className="mt-0.5 size-5 shrink-0 text-primary"
+                      strokeWidth={2.25}
+                    />
+                    <span className="font-medium leading-6">{resource}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <p className="max-w-xl text-sm leading-relaxed text-base-content/70">
+                Maintained and regularly updated as resources change.
+              </p>
+
+              <div className="card-actions mt-1 justify-start">
                 <Link
                   href={
                     "https://sites.google.com/centrevillerobotics.net/parents/"
                   }
-                  className="btn btn-primary"
+                  className="btn btn-primary w-full sm:w-auto"
                   target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  Learn More
+                  Visit the Parent Resource Hub
+                  <ExternalLink aria-hidden="true" className="size-4" />
                 </Link>
               </div>
             </div>

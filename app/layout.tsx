@@ -16,9 +16,28 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Centreville Robotics",
+  metadataBase: new URL("https://www.centrevillerobotics.org"),
+  title: {
+    default: "Centreville Robotics",
+    template: "%s | Centreville Robotics",
+  },
   description:
-    "Centreville robotics is a non-profit student run organization based out of Centreville Highschool.",
+    "Centreville Robotics is a non-profit student run organization based out of Centreville High School.",
+  openGraph: {
+    title: "Centreville Robotics",
+    description:
+      "Centreville Robotics is a non-profit student run organization based out of Centreville High School.",
+    url: "https://www.centrevillerobotics.org",
+    siteName: "Centreville Robotics",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Centreville Robotics",
+    description:
+      "Centreville Robotics is a non-profit student run organization based out of Centreville High School.",
+  },
 };
 
 export default function RootLayout({

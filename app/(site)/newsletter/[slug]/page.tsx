@@ -20,11 +20,11 @@ export async function generateMetadata({ params }: NewsletterIssuePageProps): Pr
   const issue = await getNewsletterIssue(slug)
 
   if (!issue) {
-    return { title: 'Newsletter | Centreville Robotics' }
+    return { title: 'Newsletter' }
   }
 
   return {
-    title: `${issue.title} | Newsletter | Centreville Robotics`,
+    title: `${issue.title} | Newsletter`,
     description: issue.summary,
   }
 }

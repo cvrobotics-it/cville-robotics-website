@@ -1,4 +1,11 @@
 import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Team Calendar",
+  description:
+    "Stay up to date with Centreville Robotics' upcoming outreach events and meetings.",
+};
 
 const GOOGLE_CALENDAR_EMBED_URL =
   "https://calendar.google.com/calendar/u/0/embed?src=c_7e3c604fed25fa99f4fc588a7043ec80770b70f023e5991fe681678d68b06a10@group.calendar.google.com&ctz=America/New_York";

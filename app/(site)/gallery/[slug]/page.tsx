@@ -16,11 +16,11 @@ export async function generateMetadata({ params }: GalleryAlbumPageProps): Promi
   const album = await getGalleryAlbum(slug)
 
   if (!album) {
-    return { title: 'Gallery | Centreville Robotics' }
+    return { title: 'Gallery' }
   }
 
   return {
-    title: `${album.title} | Gallery | Centreville Robotics`,
+    title: `${album.title} | Gallery`,
     description: album.summary || `Browse photos from ${album.title}.`,
   }
 }

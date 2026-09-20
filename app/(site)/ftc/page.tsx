@@ -1,6 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "FTC Teams",
+  description:
+    "Meet the FIRST Tech Challenge teams mentored by Centreville Robotics.",
+};
 
 export default function FTCTeams() {
   const teams = [

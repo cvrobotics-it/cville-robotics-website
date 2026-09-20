@@ -11,9 +11,37 @@ export default function Footer() {
           {/* Social Media Links */}
           <div className="flex flex-col items-start">
             <h3 className="text-lg font-bold mb-4">Follow Us</h3>
-            <div className="flex gap-4">
-              <SocialIcon url="https://www.instagram.com/cvillerobotics/" />
-              <SocialIcon url="https://www.tiktok.com/@centreville.robotics" />
+            <div className="flex flex-wrap gap-4">
+              <SocialIcon
+                url="https://www.facebook.com/CentrevilleRobotics/"
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+              <SocialIcon
+                url="https://www.instagram.com/cvillerobotics"
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+              <SocialIcon
+                url="https://www.tiktok.com/@cvillerobotics"
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+              <SocialIcon
+                url="https://www.youtube.com/c/CentrevilleRobotics"
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+              <SocialIcon
+                url="https://github.com/Team-5243"
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+              <SocialIcon
+                url="https://www.thebluealliance.com/team/5243"
+                target="_blank"
+                rel="noopener noreferrer"
+              />
             </div>
           </div>
 
@@ -36,17 +64,29 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/about" prefetch={false} className="link link-hover">
+                <Link
+                  href="/about"
+                  prefetch={false}
+                  className="link link-hover"
+                >
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/contact" prefetch={false} className="link link-hover">
+                <Link
+                  href="/contact"
+                  prefetch={false}
+                  className="link link-hover"
+                >
                   Contact
                 </Link>
               </li>
               <li>
-                <Link href="/outreach" prefetch={false} className="link link-hover">
+                <Link
+                  href="/outreach"
+                  prefetch={false}
+                  className="link link-hover"
+                >
                   Outreach
                 </Link>
               </li>

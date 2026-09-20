@@ -12,7 +12,7 @@ import {
 } from "@/lib/tba-api";
 
 export const metadata: Metadata = {
-  title: "Events & Competitions | Centreville Robotics",
+  title: "Events & Competitions",
   description: `Follow Team ${TEAM_NUMBER}'s competition schedule, match results, and performance analytics from FIRST Robotics Competition events.`,
 };
 
