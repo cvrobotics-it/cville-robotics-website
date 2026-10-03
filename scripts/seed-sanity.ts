@@ -100,13 +100,6 @@ const sponsorSeed: SponsorSeedEntry[] = [
     description: 'A federal technology consulting firm investing in the next generation of STEM talent.',
     website: 'https://triafed.com/',
   },
-  {
-    name: 'Ascent Educational Services',
-    logo: '/sponsors/Ascentlogo.png',
-    thanks: 'Thank you!',
-    description: 'An educational consulting organization supporting student growth and opportunity.',
-    website: 'https://www.ascent-educational-consulting.com/',
-  },
 ]
 
 function toSlug(value: string) {
@@ -238,7 +231,6 @@ async function seedGallery() {
 
     console.log(`Uploading ${imagePaths.length} image(s)...`)
 
-    const photoIds: string[] = []
     const inlinePhotos: Array<{
       _type: 'object'
       _key: string
