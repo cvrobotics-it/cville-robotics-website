@@ -49,12 +49,6 @@ const sponsors: Sponsor[] = [
     thanks: "Thank you!",
     link: "https://triafed.com/",
   },
-  {
-    name: "Ascent Educational Services",
-    logo: "/sponsors/Ascentlogo.png",
-    thanks: "Thank you!",
-    link: "https://www.ascent-educational-consulting.com/",
-  },
 ];
 
 export default async function Sponsors() {

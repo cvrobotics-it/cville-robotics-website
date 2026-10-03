@@ -61,7 +61,7 @@ export const newsletterIssueBySlugQuery = defineQuery(`
 `)
 
 export const sponsorsQuery = defineQuery(`
-  *[_type == "sponsor"]
+  *[_type == "sponsor" && name != "Ascent Educational Services"]
     | order(displayOrder asc, name asc){
       _id,
       name,

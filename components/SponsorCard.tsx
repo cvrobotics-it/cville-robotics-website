@@ -24,6 +24,7 @@ export default function SponsorCard({ sponsor, legacyLogo }: SponsorCardProps) {
               <Image
                 src={logoUrl}
                 fill
+                sizes="224px"
                 alt={logoAlt}
                 className="object-contain transition-transform duration-300 group-hover:scale-105"
               />
