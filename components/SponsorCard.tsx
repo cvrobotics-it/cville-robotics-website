@@ -10,8 +10,10 @@ type SponsorCardProps = {
 };
 
 export default function SponsorCard({ sponsor, legacyLogo }: SponsorCardProps) {
+  // Width only: with both width and height, urlFor adds a rect= crop to that aspect ratio
+  // (fit("max") only affects resizing), which cuts off any logo that isn't 2:1.
   const logoUrl = sponsor.logo?.asset
-    ? urlFor(sponsor.logo).width(600).height(300).fit("max").url()
+    ? urlFor(sponsor.logo).width(600).fit("max").url()
     : legacyLogo || null;
   const logoAlt = sponsor.name.trim().length > 0 ? `${sponsor.name} logo` : 'Sponsor logo';
 
@@ -19,14 +21,15 @@ export default function SponsorCard({ sponsor, legacyLogo }: SponsorCardProps) {
     <article className="group rounded-2xl border border-gray-100/50 bg-white shadow-lg transition-all duration-300 hover:shadow-2xl overflow-hidden">
       <div className="p-8">
         <div className="flex justify-center mb-6">
-          <div className="w-56 h-32 relative flex items-center justify-center bg-gray-50/50 rounded-lg p-4">
+          {/* fill is absolutely positioned and ignores this box's padding, so the inset lives on the image */}
+          <div className="w-56 h-32 relative flex items-center justify-center bg-gray-50/50 rounded-lg">
             {logoUrl ? (
               <Image
                 src={logoUrl}
                 fill
                 sizes="224px"
                 alt={logoAlt}
-                className="object-contain transition-transform duration-300 group-hover:scale-105"
+                className="object-contain p-4 transition-transform duration-300 group-hover:scale-105"
               />
             ) : null}
           </div>
