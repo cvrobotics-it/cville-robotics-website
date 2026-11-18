@@ -45,7 +45,7 @@ export default function StemAppreciation() {
               </p>
               <div className="card-actions">
                 <Link
-                  href="/outreach/past"
+                  href="/outreach"
                   className="btn btn-outline text-white border-white hover:bg-white hover:text-[#4A90E2] transition-all"
                 >
                   Learn More
@@ -84,7 +84,7 @@ export default function StemAppreciation() {
               </p>
               <div className="card-actions">
                 <Link
-                  href="/outreach/past"
+                  href="/outreach"
                   className="btn btn-outline text-white border-white hover:bg-white hover:text-[#4A90E2] transition-all"
                 >
                   Learn More

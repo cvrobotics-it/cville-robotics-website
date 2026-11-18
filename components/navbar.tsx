@@ -22,12 +22,6 @@ const programsLinks: NavItem[] = [
   { label: "Join Robotics", href: "/join" },
 ];
 
-const outreachLinks: NavItem[] = [
-  { label: "Outreach Data", href: "/outreach" },
-  { label: "Past Outreach", href: "/outreach/past" },
-  { label: "Calendar", href: "/outreach/calendar" },
-];
-
 const secondaryLinks: NavItem[] = [
   { label: "Contact", href: "/contact" },
   { label: "Sponsors", href: "/sponsors" },
@@ -43,11 +37,8 @@ const mobileMenuGroups: (NavItem | NavGroup)[] = [
     label: "Programs", 
     items: programsLinks
   },
-  { 
-    label: "Outreach", 
-    items: outreachLinks
-  },
-  { label: "Calendar", href: "/outreach/calendar" },
+  { label: "Outreach", href: "/outreach" },
+  { label: "Calendar", href: "/calendar" },
   { label: "Contact", href: "/contact" },
   { label: "Sponsors", href: "/sponsors" },
 ];
@@ -179,44 +170,19 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Outreach Dropdown */}
-            <div className="dropdown dropdown-hover" ref={(el) => {
-              dropdownRefs.current.outreach = el;
-            }}>
-              <button
-                type="button"
-                onClick={() => toggleDropdown("outreach")}
-                className={`btn btn-ghost rounded-btn gap-1 ${isGroupActive(outreachLinks) ? "btn-active" : ""}`}
-                aria-label="Outreach menu"
-                aria-expanded={openDropdown === "outreach"}
-                tabIndex={0}
-              >
-                Outreach
-                <ChevronDown className="w-4 h-4" />
-              </button>
-              {openDropdown === "outreach" && (
-                <ul 
-                  className="menu dropdown-content bg-base-100 rounded-box z-[100] w-52 p-2 shadow-xl border border-base-300 mt-1 opacity-100 transition-opacity duration-200"
-                >
-                  {outreachLinks.map((item) => (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        prefetch={false}
-                        className={isActive(item.href) ? "active" : ""}
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            <Link
+              href="/outreach"
+              prefetch={false}
+              className={`btn btn-ghost rounded-btn ${isActive("/outreach") ? "btn-active" : ""}`}
+              aria-current={isActive("/outreach") ? "page" : undefined}
+            >
+              Outreach
+            </Link>
 
             <Link
-              href="/outreach/calendar"
+              href="/calendar"
               prefetch={false}
-              className={`btn btn-ghost btn-square ${isActive("/outreach/calendar") ? "btn-active" : ""}`}
+              className={`btn btn-ghost btn-square ${isActive("/calendar") ? "btn-active" : ""}`}
               aria-label="Calendar"
               title="Calendar"
             >

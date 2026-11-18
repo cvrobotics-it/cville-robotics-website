@@ -1,7 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async redirects() {
+    return [
+      {
+        source: "/outreach/past",
+        destination: "/outreach#projects",
+        permanent: true,
+      },
+      {
+        source: "/outreach/calendar",
+        destination: "/calendar",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
