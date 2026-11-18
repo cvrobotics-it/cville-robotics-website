@@ -1,7 +1,7 @@
 import { SocialIcon } from "react-social-icons";
 import Link from "next/link";
 
-import NewsletterSignup from "@/components/newsletter-signup";
+import NewsletterLink from "@/components/newsletter-link";
 
 export default function Footer() {
   return (
@@ -49,9 +49,9 @@ export default function Footer() {
           <div className="flex flex-col items-start">
             <h3 className="text-lg font-bold mb-4">Newsletter</h3>
             <p className="mb-4 text-sm">
-              Stay updated with our latest news and updates.
+              Read team news, event recaps, and updates from our community.
             </p>
-            <NewsletterSignup />
+            <NewsletterLink />
           </div>
 
           {/* Quick Links */}

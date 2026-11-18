@@ -5,6 +5,7 @@ import { Calendar, History, Trophy } from "lucide-react";
 
 import EventDetailsCard from "@/components/event-details-card";
 import type { TBAEvent } from "@/lib/tba-api";
+import { getToday } from "@/lib/date-only";
 
 const SHOW_UPCOMING_EVENTS = true;
 
@@ -19,7 +20,11 @@ type CachedEvents = {
 };
 
 function SectionEyebrow({ children }: { children: React.ReactNode }) {
-  return <p className="text-sm font-semibold uppercase tracking-[0.2em] text-base-content/50">{children}</p>;
+  return (
+    <p className="text-sm font-semibold uppercase tracking-[0.2em] text-base-content/50">
+      {children}
+    </p>
+  );
 }
 
 function EventSectionHeader({
@@ -41,10 +46,14 @@ function EventSectionHeader({
         </div>
         <div>
           <SectionEyebrow>{eyebrow}</SectionEyebrow>
-          <h2 className="mt-1 text-3xl font-bold tracking-tight text-primary md:text-4xl">{title}</h2>
+          <h2 className="mt-1 text-3xl font-bold tracking-tight text-primary md:text-4xl">
+            {title}
+          </h2>
         </div>
       </div>
-      <p className="max-w-xl text-sm leading-relaxed text-base-content/65 md:text-right">{description}</p>
+      <p className="max-w-xl text-sm leading-relaxed text-base-content/65 md:text-right">
+        {description}
+      </p>
     </div>
   );
 }
@@ -91,7 +100,10 @@ function getEventsCacheKey(teamKey: string, year: number) {
   return `cvillerobotics_events_cache_${teamKey}_${year}`;
 }
 
-export default function EventsPageContent({ teamKey, years }: EventsPageContentProps) {
+export default function EventsPageContent({
+  teamKey,
+  years,
+}: EventsPageContentProps) {
   const [selectedYear, setSelectedYear] = useState(years[0]);
   const [events, setEvents] = useState<TBAEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -103,7 +115,12 @@ export default function EventsPageContent({ teamKey, years }: EventsPageContentP
     const controller = new AbortController();
     let isCurrentRequest = true;
     const cacheKey = getEventsCacheKey(teamKey, selectedYear);
-    const cachedValue = window.localStorage.getItem(cacheKey);
+    let cachedValue: string | null = null;
+    try {
+      cachedValue = window.localStorage.getItem(cacheKey);
+    } catch {
+      // Browser storage is optional; continue with the network request.
+    }
     let didUseCache = false;
 
     if (cachedValue) {
@@ -115,7 +132,11 @@ export default function EventsPageContent({ teamKey, years }: EventsPageContentP
           didUseCache = true;
         }
       } catch {
-        window.localStorage.removeItem(cacheKey);
+        try {
+          window.localStorage.removeItem(cacheKey);
+        } catch {
+          // Storage may be unavailable in this browser.
+        }
       }
     } else {
       setEvents([]);
@@ -124,7 +145,10 @@ export default function EventsPageContent({ teamKey, years }: EventsPageContentP
     setIsLoading(!didUseCache);
     setIsRefreshing(didUseCache);
 
-    fetch(`/api/tba/events?team=${encodeURIComponent(teamKey)}&year=${selectedYear}`, { signal: controller.signal })
+    fetch(
+      `/api/tba/events?team=${encodeURIComponent(teamKey)}&year=${selectedYear}`,
+      { signal: controller.signal },
+    )
       .then((response) => {
         if (!response.ok) throw new Error("Failed to load events");
         return response.json() as Promise<TBAEvent[]>;
@@ -132,11 +156,25 @@ export default function EventsPageContent({ teamKey, years }: EventsPageContentP
       .then((nextEvents) => {
         if (!isCurrentRequest) return;
         setEvents(nextEvents);
-        window.localStorage.setItem(cacheKey, JSON.stringify({ savedAt: Date.now(), events: nextEvents } satisfies CachedEvents));
+        try {
+          window.localStorage.setItem(
+            cacheKey,
+            JSON.stringify({
+              savedAt: Date.now(),
+              events: nextEvents,
+            } satisfies CachedEvents),
+          );
+        } catch {
+          // A storage error must not hide successfully loaded events.
+        }
         setHasError(false);
       })
       .catch((error) => {
-        if (!isCurrentRequest || error instanceof DOMException && error.name === "AbortError") return;
+        if (
+          !isCurrentRequest ||
+          (error instanceof DOMException && error.name === "AbortError")
+        )
+          return;
         setHasError(true);
       })
       .finally(() => {
@@ -155,13 +193,13 @@ export default function EventsPageContent({ teamKey, years }: EventsPageContentP
     startTransition(() => setSelectedYear(year));
   };
 
-  const now = new Date();
+  const today = getToday();
   const upcomingEvents = events
-    .filter((event) => new Date(event.start_date) > now)
-    .sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime());
+    .filter((event) => event.end_date >= today)
+    .sort((a, b) => a.start_date.localeCompare(b.start_date));
   const pastEvents = events
-    .filter((event) => new Date(event.end_date) <= now)
-    .sort((a, b) => new Date(b.start_date).getTime() - new Date(a.start_date).getTime());
+    .filter((event) => event.end_date < today)
+    .sort((a, b) => b.start_date.localeCompare(a.start_date));
 
   return (
     <>
@@ -173,21 +211,28 @@ export default function EventsPageContent({ teamKey, years }: EventsPageContentP
             </div>
             <div>
               <SectionEyebrow>Season archive</SectionEyebrow>
-              <h2 className="mt-1 text-2xl font-bold text-primary">Browse one season at a time</h2>
+              <h2 className="mt-1 text-2xl font-bold text-primary">
+                Browse one season at a time
+              </h2>
               <p className="mt-1 text-sm text-base-content/65">
-                Centreville Robotics has been active since 2014. Pick a season to keep the page fast and focused.
+                Centreville Robotics has been active since 2014. Pick a season
+                to keep the page fast and focused.
               </p>
             </div>
           </div>
           <label className="form-control w-full md:w-56">
-            <span className="label-text mb-2 font-semibold text-base-content/70">Season</span>
+            <span className="label-text mb-2 font-semibold text-base-content/70">
+              Season
+            </span>
             <select
               className="select select-bordered select-primary w-full rounded-2xl"
               value={selectedYear}
               onChange={(event) => handleYearChange(Number(event.target.value))}
             >
               {years.map((year) => (
-                <option key={year} value={year}>{year} season</option>
+                <option key={year} value={year}>
+                  {year} season
+                </option>
               ))}
             </select>
           </label>
@@ -211,8 +256,13 @@ export default function EventsPageContent({ teamKey, years }: EventsPageContentP
       {hasError && events.length === 0 ? (
         <div className="alert alert-error shadow-lg">
           <div>
-            <span className="font-semibold">Unable to Load {selectedYear} Events</span>
-            <p className="mt-1 text-sm">Please try refreshing the page or check The Blue Alliance directly.</p>
+            <span className="font-semibold">
+              Unable to Load {selectedYear} Events
+            </span>
+            <p className="mt-1 text-sm">
+              Please try refreshing the page or check The Blue Alliance
+              directly.
+            </p>
           </div>
         </div>
       ) : null}
@@ -221,8 +271,12 @@ export default function EventsPageContent({ teamKey, years }: EventsPageContentP
         <div className="alert alert-info shadow-lg">
           <Calendar className="h-5 w-5" />
           <div>
-            <span className="font-semibold">No {selectedYear} Events Found</span>
-            <p className="mt-1 text-sm">Select another season to continue browsing the archive.</p>
+            <span className="font-semibold">
+              No {selectedYear} Events Found
+            </span>
+            <p className="mt-1 text-sm">
+              Select another season to continue browsing the archive.
+            </p>
           </div>
         </div>
       ) : null}
@@ -231,9 +285,13 @@ export default function EventsPageContent({ teamKey, years }: EventsPageContentP
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
           <div>
             <SectionEyebrow>Selected season</SectionEyebrow>
-            <h2 className="mt-1 text-3xl font-bold text-primary">{selectedYear} events</h2>
+            <h2 className="mt-1 text-3xl font-bold text-primary">
+              {selectedYear} events
+            </h2>
           </div>
-          {(isRefreshing || isPending) ? <span className="badge badge-outline badge-lg">Refreshing...</span> : null}
+          {isRefreshing || isPending ? (
+            <span className="badge badge-outline badge-lg">Refreshing...</span>
+          ) : null}
         </div>
       ) : null}
 
@@ -242,12 +300,17 @@ export default function EventsPageContent({ teamKey, years }: EventsPageContentP
           <EventSectionHeader
             icon={<Calendar className="h-6 w-6" />}
             eyebrow="Next up"
-            title="Upcoming events"
-            description="The next competitions on the schedule, with official links ready before match data appears."
+            title="Current and upcoming events"
+            description="Competitions happening now and next, with official standings and match footage when available."
           />
           <div className="space-y-8">
             {upcomingEvents.map((event) => (
-              <EventDetailsCard key={event.key} event={event} isPast={false} teamKey={teamKey} />
+              <EventDetailsCard
+                key={event.key}
+                event={event}
+                isPast={false}
+                teamKey={teamKey}
+              />
             ))}
           </div>
         </section>
@@ -263,7 +326,12 @@ export default function EventsPageContent({ teamKey, years }: EventsPageContentP
           />
           <div className="space-y-8">
             {pastEvents.map((event) => (
-              <EventDetailsCard key={event.key} event={event} isPast={true} teamKey={teamKey} />
+              <EventDetailsCard
+                key={event.key}
+                event={event}
+                isPast={true}
+                teamKey={teamKey}
+              />
             ))}
           </div>
         </section>

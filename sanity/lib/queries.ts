@@ -1,4 +1,4 @@
-import { defineQuery } from 'next-sanity'
+import { defineQuery } from "next-sanity";
 
 export const GALLERY_ALBUM_FIELDS = `{
   _id,
@@ -10,30 +10,30 @@ export const GALLERY_ALBUM_FIELDS = `{
   location,
   summary,
   coverImageIndex,
-  photos[]{
+  "photos": coalesce(photos, [])[]{
     _key,
     caption,
     photographer,
     image,
   }
-}`
+}`;
 
 export const currentGalleryAlbumsQuery = defineQuery(`
   *[_type == "galleryAlbum" && category == "current"]
     | order(seasonYear desc, eventDate desc, title asc)
     ${GALLERY_ALBUM_FIELDS}
-`)
+`);
 
 export const archivedGalleryAlbumsQuery = defineQuery(`
   *[_type == "galleryAlbum" && category == "archive"]
     | order(seasonYear desc, eventDate desc, title asc)
     ${GALLERY_ALBUM_FIELDS}
-`)
+`);
 
 export const galleryAlbumBySlugQuery = defineQuery(`
   *[_type == "galleryAlbum" && slug.current == $slug][0]
     ${GALLERY_ALBUM_FIELDS}
-`)
+`);
 
 export const newsletterIssuesQuery = defineQuery(`
   *[_type == "newsletterIssue"]
@@ -44,9 +44,9 @@ export const newsletterIssuesQuery = defineQuery(`
       publishDate,
       summary,
       heroImage,
-      body,
+      "body": coalesce(body, []),
     }
-`)
+`);
 
 export const newsletterIssueBySlugQuery = defineQuery(`
   *[_type == "newsletterIssue" && slug.current == $slug][0]{
@@ -56,9 +56,9 @@ export const newsletterIssueBySlugQuery = defineQuery(`
     publishDate,
     summary,
     heroImage,
-    body,
+    "body": coalesce(body, []),
   }
-`)
+`);
 
 export const sponsorsQuery = defineQuery(`
   *[_type == "sponsor" && name != "Ascent Educational Services"]
@@ -71,4 +71,4 @@ export const sponsorsQuery = defineQuery(`
       displayOrder,
       logo,
     }
-`)
+`);

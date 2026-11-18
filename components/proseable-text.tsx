@@ -1,16 +1,16 @@
-import { useMemo } from 'react'
-import type { PortableTextBlock } from 'sanity'
+import { useMemo } from "react";
+import type { PortableTextBlock } from "sanity";
 
-import PortableTextRenderer from './portable-text'
+import PortableTextRenderer from "./portable-text";
 
 type ProseableTextProps = {
-  value: PortableTextBlock[]
-}
+  value: PortableTextBlock[];
+};
 
 /**
  * Use Tailwind CSS's `prose` classes with Portable Text markup (blocks)
  * without inheriting styles for custom components (types like images)
- * 
+ *
  * This groups standard text blocks together and wraps them in prose,
  * while keeping custom types (like images) outside of prose styling.
  */
@@ -21,7 +21,7 @@ export default function ProseableText({ value = [] }: ProseableTextProps) {
     () =>
       value.reduce<PortableTextBlock[][]>(
         (acc, item) => {
-          const lastIdx = acc.length - 1
+          const lastIdx = acc.length - 1;
 
           if (
             // We don't have items in this group yet
@@ -29,28 +29,28 @@ export default function ProseableText({ value = [] }: ProseableTextProps) {
             // The last group has the same `_type`
             acc[lastIdx][0]._type === item._type
           ) {
-            acc[lastIdx].push(item)
+            acc[lastIdx].push(item);
           } else {
             // Create a new group because the `_type` is different
-            acc.push([item])
+            acc.push([item]);
           }
 
-          return acc
+          return acc;
         },
-        [[]]
+        [[]],
       ),
-    [value]
-  )
+    [value],
+  );
 
-  if (!valueGroups?.length) return null
+  if (!value.length) return null;
 
   return valueGroups.map((group) =>
-    group[0]._type === 'block' ? (
+    group[0]._type === "block" ? (
       <div key={group[0]._key} className="prose prose-lg max-w-none">
         <PortableTextRenderer value={group} />
       </div>
     ) : (
       <PortableTextRenderer key={group[0]._key} value={group} />
-    )
-  )
+    ),
+  );
 }

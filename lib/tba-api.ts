@@ -1,4 +1,5 @@
 // Shared TBA API utilities for both API routes and server components
+import { getDateRangeStatus, getToday } from "./date-only";
 
 const TBA_API_BASE = "https://www.thebluealliance.com/api/v3";
 const TBA_API_KEY = process.env.TBA_API_KEY || "";
@@ -12,20 +13,23 @@ const ROBOTICS_START_YEAR = 2014;
 const CURRENT_SEASON_YEAR = new Date().getFullYear();
 const DEFAULT_COMPETITION_YEARS = Array.from(
   { length: CURRENT_SEASON_YEAR - ROBOTICS_START_YEAR + 1 },
-  (_, index) => CURRENT_SEASON_YEAR - index
+  (_, index) => CURRENT_SEASON_YEAR - index,
 );
-const CONFIGURED_COMPETITION_YEARS = (process.env.NEXT_PUBLIC_COMPETITION_YEARS || "")
+const CONFIGURED_COMPETITION_YEARS = (
+  process.env.NEXT_PUBLIC_COMPETITION_YEARS || ""
+)
   .split(",")
   .map((y) => parseInt(y.trim(), 10))
   .filter((year) => !Number.isNaN(year));
-const COMPETITION_YEARS = Array.from(new Set([...CONFIGURED_COMPETITION_YEARS, ...DEFAULT_COMPETITION_YEARS])).sort(
-  (a, b) => b - a
-);
+const COMPETITION_YEARS = Array.from(
+  new Set([...CONFIGURED_COMPETITION_YEARS, ...DEFAULT_COMPETITION_YEARS]),
+).sort((a, b) => b - a);
 
 export const TEAM_NUMBER = TEAM_NUMBER_RAW;
 export const TEAM_KEY = `frc${TEAM_NUMBER}`;
 export const PRIMARY_YEAR = COMPETITION_YEARS[0] || 2026;
-export const ALL_YEARS = COMPETITION_YEARS.length > 0 ? COMPETITION_YEARS : [PRIMARY_YEAR];
+export const ALL_YEARS =
+  COMPETITION_YEARS.length > 0 ? COMPETITION_YEARS : [PRIMARY_YEAR];
 
 export type TBAEvent = {
   key: string;
@@ -79,7 +83,7 @@ async function fetchTBA(endpoint: string, revalidate = EVENT_CACHE_SECONDS) {
   const headers: HeadersInit = {
     Accept: "application/json",
   };
-  
+
   if (TBA_API_KEY) {
     headers["X-TBA-Auth-Key"] = TBA_API_KEY;
   }
@@ -103,9 +107,11 @@ async function fetchTBA(endpoint: string, revalidate = EVENT_CACHE_SECONDS) {
 export async function getTeamEvents(teamKey = TEAM_KEY): Promise<TBAEvent[]> {
   // Fetch events for all configured years in parallel
   const eventsPerYear = await Promise.all(
-    ALL_YEARS.map((year) => fetchTBA(`/team/${teamKey}/events/${year}`).catch(() => []))
+    ALL_YEARS.map((year) =>
+      fetchTBA(`/team/${teamKey}/events/${year}`).catch(() => []),
+    ),
   );
-  
+
   // Flatten and return all events
   return eventsPerYear.flat();
 }
@@ -113,24 +119,45 @@ export async function getTeamEvents(teamKey = TEAM_KEY): Promise<TBAEvent[]> {
 /**
  * Get events for a specific year
  */
-export async function getTeamEventsForYear(teamKey = TEAM_KEY, year: number): Promise<TBAEvent[]> {
+export async function getTeamEventsForYear(
+  teamKey = TEAM_KEY,
+  year: number,
+): Promise<TBAEvent[]> {
   return fetchTBA(`/team/${teamKey}/events/${year}`);
 }
 
-export async function getTeamEventMatches(teamKey = TEAM_KEY, eventKey: string): Promise<TBAMatch[]> {
+export async function getTeamEventMatches(
+  teamKey = TEAM_KEY,
+  eventKey: string,
+): Promise<TBAMatch[]> {
   return fetchTBA(`/team/${teamKey}/event/${eventKey}/matches`);
 }
 
-export async function getTeamMatchesForYear(teamKey = TEAM_KEY, year: number): Promise<TBAMatch[]> {
+export async function getTeamMatchesForYear(
+  teamKey = TEAM_KEY,
+  year: number,
+): Promise<TBAMatch[]> {
   return fetchTBA(`/team/${teamKey}/matches/${year}`);
 }
 
-export async function getTeamEventStatus(teamKey = TEAM_KEY, eventKey: string): Promise<TBAStatus> {
-  return fetchTBA(`/team/${teamKey}/event/${eventKey}/status`, STATUS_CACHE_SECONDS);
+export async function getTeamEventStatus(
+  teamKey = TEAM_KEY,
+  eventKey: string,
+): Promise<TBAStatus> {
+  return fetchTBA(
+    `/team/${teamKey}/event/${eventKey}/status`,
+    STATUS_CACHE_SECONDS,
+  );
 }
 
-export async function getTeamEventStatusesForYear(teamKey = TEAM_KEY, year: number): Promise<Record<string, TBAStatus>> {
-  return fetchTBA(`/team/${teamKey}/events/${year}/statuses`, STATUS_CACHE_SECONDS);
+export async function getTeamEventStatusesForYear(
+  teamKey = TEAM_KEY,
+  year: number,
+): Promise<Record<string, TBAStatus>> {
+  return fetchTBA(
+    `/team/${teamKey}/events/${year}/statuses`,
+    STATUS_CACHE_SECONDS,
+  );
 }
 
 export function formatCompLevel(compLevel: string): string {
@@ -144,26 +171,38 @@ export function formatCompLevel(compLevel: string): string {
   return levels[compLevel] || compLevel.toUpperCase();
 }
 
-export function didTeamWin(match: TBAMatch, teamKey = TEAM_KEY): boolean | null {
+export function didTeamWin(
+  match: TBAMatch,
+  teamKey = TEAM_KEY,
+): boolean | null {
   if (!match.winning_alliance) return null;
   const isRed = match.alliances.red.team_keys.includes(teamKey);
-  return (isRed && match.winning_alliance === "red") || (!isRed && match.winning_alliance === "blue");
+  if (!isRed && !match.alliances.blue.team_keys.includes(teamKey)) return null;
+  return (
+    (isRed && match.winning_alliance === "red") ||
+    (!isRed && match.winning_alliance === "blue")
+  );
 }
 
-export function getCurrentEvent(events: TBAEvent[]): TBAEvent | null {
-  const now = new Date();
-  const ongoing = events.find((e) => {
-    const start = new Date(e.start_date);
-    const end = new Date(e.end_date);
-    return start <= now && now <= end;
-  });
-  
+export function getCurrentEvent(
+  events: TBAEvent[],
+  today = getToday(),
+): TBAEvent | null {
+  const ongoing = events.find(
+    (event) =>
+      getDateRangeStatus({
+        start: event.start_date,
+        end: event.end_date,
+        today,
+      }) === "ongoing",
+  );
+
   if (ongoing) return ongoing;
-  
+
   // If no ongoing event, return most recent past event
   const past = events
-    .filter((e) => new Date(e.end_date) < now)
-    .sort((a, b) => new Date(b.end_date).getTime() - new Date(a.end_date).getTime());
-  
+    .filter((event) => event.end_date < today)
+    .sort((a, b) => b.end_date.localeCompare(a.end_date));
+
   return past[0] || null;
 }

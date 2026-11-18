@@ -1,41 +1,46 @@
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import type { Metadata } from 'next'
+import { formatDateOnly } from "@/lib/date-only";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 
-import AlbumPhotoGallery from '@/components/album-photo-gallery'
-import { getGalleryAlbum } from '@/lib/gallery/content'
+import AlbumPhotoGallery from "@/components/album-photo-gallery";
+import { getGalleryAlbum } from "@/lib/gallery/content";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 type GalleryAlbumPageProps = {
-  params: Promise<{ slug: string }>
-}
+  params: Promise<{ slug: string }>;
+};
 
-export async function generateMetadata({ params }: GalleryAlbumPageProps): Promise<Metadata> {
-  const { slug } = await params
-  const album = await getGalleryAlbum(slug)
+export async function generateMetadata({
+  params,
+}: GalleryAlbumPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const album = await getGalleryAlbum(slug);
 
   if (!album) {
-    return { title: 'Gallery' }
+    return { title: "Gallery" };
   }
 
   return {
     title: `${album.title} | Gallery`,
     description: album.summary || `Browse photos from ${album.title}.`,
-  }
+  };
 }
 
-export default async function GalleryAlbumPage({ params }: GalleryAlbumPageProps) {
-  const { slug } = await params
-  const album = await getGalleryAlbum(slug)
+export default async function GalleryAlbumPage({
+  params,
+}: GalleryAlbumPageProps) {
+  const { slug } = await params;
+  const album = await getGalleryAlbum(slug);
 
-  if (!album) notFound()
+  if (!album) notFound();
 
-  const formattedDate = new Date(album.eventDate).toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  })
+  const formattedDate = formatDateOnly(album.eventDate, {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
 
   return (
     <div className="min-h-screen bg-base-200">
@@ -50,7 +55,9 @@ export default async function GalleryAlbumPage({ params }: GalleryAlbumPageProps
           <div className="max-w-4xl space-y-4">
             <div className="flex flex-wrap items-center gap-2 text-sm text-base-content/60">
               <span className="badge badge-outline">{album.seasonYear}</span>
-              <span className="badge badge-ghost">{album.category === 'current' ? 'Current gallery' : 'Archive'}</span>
+              <span className="badge badge-ghost">
+                {album.category === "current" ? "Current gallery" : "Archive"}
+              </span>
             </div>
             <h1 className="text-5xl font-bold text-primary">{album.title}</h1>
             <div className="flex flex-wrap gap-5 text-base text-base-content/70">
@@ -58,12 +65,16 @@ export default async function GalleryAlbumPage({ params }: GalleryAlbumPageProps
               {album.location ? <span>{album.location}</span> : null}
               <span>{album.photos.length} photos</span>
             </div>
-            {album.summary ? <p className="text-lg leading-relaxed text-base-content/75">{album.summary}</p> : null}
+            {album.summary ? (
+              <p className="text-lg leading-relaxed text-base-content/75">
+                {album.summary}
+              </p>
+            ) : null}
           </div>
         </section>
 
         <AlbumPhotoGallery album={album} />
       </div>
     </div>
-  )
+  );
 }
