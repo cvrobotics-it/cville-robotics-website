@@ -1,5 +1,7 @@
 "use client";
 
+import { formatDateOnly } from "@/lib/date-only";
+
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
@@ -13,7 +15,9 @@ type FeaturedAlbumsCarouselProps = {
   albums: SanityGalleryAlbum[];
 };
 
-export default function FeaturedAlbumsCarousel({ albums }: FeaturedAlbumsCarouselProps) {
+export default function FeaturedAlbumsCarousel({
+  albums,
+}: FeaturedAlbumsCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: albums.length > 1 },
     albums.length > 1
@@ -24,7 +28,7 @@ export default function FeaturedAlbumsCarousel({ albums }: FeaturedAlbumsCarouse
             stopOnInteraction: false,
           }),
         ]
-      : []
+      : [],
   );
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -43,28 +47,42 @@ export default function FeaturedAlbumsCarousel({ albums }: FeaturedAlbumsCarouse
     <section className="space-y-5">
       <div className="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-base-content/50">Featured</p>
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-base-content/50">
+            Featured
+          </p>
           <h3 className="text-3xl font-bold text-primary">Recent albums</h3>
         </div>
-        <p className="text-sm text-base-content/60">A quick look at the latest team moments.</p>
+        <p className="text-sm text-base-content/60">
+          A quick look at the latest team moments.
+        </p>
       </div>
 
-      <div className="overflow-hidden rounded-[1.75rem] border border-base-300 bg-base-100 shadow-xl" ref={emblaRef}>
+      <div
+        className="overflow-hidden rounded-[1.75rem] border border-base-300 bg-base-100 shadow-xl"
+        ref={emblaRef}
+      >
         <div className="flex">
           {albums.map((album) => {
-            const coverIndex = album.coverImageIndex ?? 0
-            const coverPhoto = album.photos[coverIndex]
+            const coverIndex = album.coverImageIndex ?? 0;
+            const coverPhoto = album.photos[coverIndex];
             const coverImage = coverPhoto?.image?.asset
-              ? urlFor(coverPhoto.image).width(1600).height(900).fit("crop").url()
+              ? urlFor(coverPhoto.image)
+                  .width(1600)
+                  .height(900)
+                  .fit("crop")
+                  .url()
               : null;
-            const formattedDate = new Date(album.eventDate).toLocaleDateString("en-US", {
+            const formattedDate = formatDateOnly(album.eventDate, {
               month: "long",
               day: "numeric",
               year: "numeric",
             });
 
             return (
-              <article key={album._id} className="relative min-w-0 flex-[0_0_100%]">
+              <article
+                key={album._id}
+                className="relative min-w-0 flex-[0_0_100%]"
+              >
                 <div className="relative aspect-[16/8] bg-base-200">
                   {coverImage ? (
                     <Image
@@ -80,14 +98,25 @@ export default function FeaturedAlbumsCarousel({ albums }: FeaturedAlbumsCarouse
                   <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 lg:p-10">
                     <div className="max-w-3xl space-y-3 text-white">
                       <div className="flex flex-wrap items-center gap-2 text-sm text-white/75">
-                        <span className="badge badge-outline border-white/30 text-white">{album.seasonYear}</span>
+                        <span className="badge badge-outline border-white/30 text-white">
+                          {album.seasonYear}
+                        </span>
                         <span>{formattedDate}</span>
                         {album.location ? <span>{album.location}</span> : null}
                       </div>
-                      <h4 className="text-3xl font-bold md:text-4xl">{album.title}</h4>
-                      {album.summary ? <p className="max-w-2xl text-base text-white/80">{album.summary}</p> : null}
+                      <h4 className="text-3xl font-bold md:text-4xl">
+                        {album.title}
+                      </h4>
+                      {album.summary ? (
+                        <p className="max-w-2xl text-base text-white/80">
+                          {album.summary}
+                        </p>
+                      ) : null}
                       <div className="pt-2">
-                        <Link href={`/gallery/${album.slug}`} className="btn btn-primary btn-sm md:btn-md">
+                        <Link
+                          href={`/gallery/${album.slug}`}
+                          className="btn btn-primary btn-sm md:btn-md"
+                        >
                           View album
                         </Link>
                       </div>

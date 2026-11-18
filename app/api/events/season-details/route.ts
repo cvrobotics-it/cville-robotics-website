@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { seasonDetailsParametersSchema } from "@/lib/request-parameters";
 
 import {
   ALL_YEARS,
@@ -18,11 +19,20 @@ type EventDetails = {
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const teamKey = searchParams.get("team") || TEAM_KEY;
   const yearsParam = searchParams.get("years");
-  const years = (yearsParam ? yearsParam.split(",") : ALL_YEARS.map(String))
-    .map((year) => Number.parseInt(year.trim(), 10))
-    .filter((year) => !Number.isNaN(year));
+  const parameters = seasonDetailsParametersSchema.safeParse({
+    team: searchParams.get("team") ?? TEAM_KEY,
+    years:
+      yearsParam === null
+        ? ALL_YEARS.map(String)
+        : yearsParam.split(",").map((year) => year.trim()),
+  });
+  if (!parameters.success)
+    return NextResponse.json(
+      { error: "Provide a valid team and up to 40 season years" },
+      { status: 400 },
+    );
+  const { team: teamKey, years } = parameters.data;
 
   const detailsByEvent: Record<string, EventDetails> = {};
 
@@ -33,8 +43,10 @@ export async function GET(request: Request) {
         getTeamEventStatusesForYear(teamKey, year),
       ]);
 
-      const matches = matchesResult.status === "fulfilled" ? matchesResult.value : [];
-      const statuses = statusesResult.status === "fulfilled" ? statusesResult.value : {};
+      const matches =
+        matchesResult.status === "fulfilled" ? matchesResult.value : [];
+      const statuses =
+        statusesResult.status === "fulfilled" ? statusesResult.value : {};
 
       for (const match of matches) {
         detailsByEvent[match.event_key] ||= {
@@ -56,11 +68,16 @@ export async function GET(request: Request) {
         detailsByEvent[eventKey].tbaStatus = status;
       }
 
-      return matchesResult.status === "rejected" && statusesResult.status === "rejected";
-    })
+      return (
+        matchesResult.status === "rejected" &&
+        statusesResult.status === "rejected"
+      );
+    }),
   );
 
-  const fetchError = yearResults.every((result) => result.status === "fulfilled" && result.value);
+  const fetchError = yearResults.every(
+    (result) => result.status === "rejected" || result.value,
+  );
 
   return NextResponse.json({ events: detailsByEvent, fetchError });
 }

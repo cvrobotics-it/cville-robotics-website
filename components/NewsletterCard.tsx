@@ -1,33 +1,34 @@
-import Image from 'next/image'
-import Link from 'next/link'
+import { formatDateOnly } from "@/lib/date-only";
+import Image from "next/image";
+import Link from "next/link";
 
-import { urlFor } from '@/sanity/lib/image'
-import type { SanityNewsletterIssue } from '@/sanity/lib/types'
+import { urlFor } from "@/sanity/lib/image";
+import type { SanityNewsletterIssue } from "@/sanity/lib/types";
 
 type NewsletterCardProps = {
-  issue: SanityNewsletterIssue
-  variant?: 'featured' | 'default'
-}
+  issue: SanityNewsletterIssue;
+  variant?: "featured" | "default";
+};
 
 export default function NewsletterCard({
   issue,
-  variant = 'default',
+  variant = "default",
 }: NewsletterCardProps) {
   const heroUrl = issue.heroImage?.asset
-    ? urlFor(issue.heroImage).width(1200).height(630).fit('crop').url()
-    : null
+    ? urlFor(issue.heroImage).width(1200).height(630).fit("crop").url()
+    : null;
 
   const cardThumbUrl = issue.heroImage?.asset
-    ? urlFor(issue.heroImage).width(200).height(200).fit('crop').url()
-    : null
+    ? urlFor(issue.heroImage).width(200).height(200).fit("crop").url()
+    : null;
 
-  const formattedDate = new Date(issue.publishDate).toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  })
+  const formattedDate = formatDateOnly(issue.publishDate, {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
 
-  if (variant === 'featured') {
+  if (variant === "featured") {
     return (
       <article className="overflow-hidden rounded-[1.75rem] border border-base-300 bg-base-100 shadow-xl">
         {heroUrl ? (
@@ -48,12 +49,15 @@ export default function NewsletterCard({
           </div>
           <h2 className="text-3xl font-bold text-primary">{issue.title}</h2>
           <p className="text-base-content/75">{issue.summary}</p>
-          <Link href={`/newsletter/${issue.slug}`} className="btn btn-primary w-fit">
+          <Link
+            href={`/newsletter/${issue.slug}`}
+            className="btn btn-primary w-fit"
+          >
             Read issue
           </Link>
         </div>
       </article>
-    )
+    );
   }
 
   return (
@@ -75,12 +79,17 @@ export default function NewsletterCard({
           <h3 className="mt-1 text-xl font-semibold text-base-content group-hover:text-primary">
             <Link href={`/newsletter/${issue.slug}`}>{issue.title}</Link>
           </h3>
-          <p className="mt-2 text-sm text-base-content/65 line-clamp-3">{issue.summary}</p>
+          <p className="mt-2 text-sm text-base-content/65 line-clamp-3">
+            {issue.summary}
+          </p>
         </div>
-        <Link href={`/newsletter/${issue.slug}`} className="mt-4 text-sm font-medium text-primary hover:underline">
+        <Link
+          href={`/newsletter/${issue.slug}`}
+          className="mt-4 text-sm font-medium text-primary hover:underline"
+        >
           Read more
         </Link>
       </div>
     </article>
-  )
+  );
 }

@@ -3,8 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { CalendarDays, ChevronDown } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { useModalDialog } from "@/lib/use-modal-dialog";
 
 type NavItem = { label: string; href: string };
 type NavGroup = { label: string; items: NavItem[] };
@@ -33,9 +34,9 @@ const mobileMenuGroups: (NavItem | NavGroup)[] = [
   { label: "Events", href: "/events" },
   { label: "Gallery", href: "/gallery" },
   { label: "Newsletter", href: "/newsletter" },
-  { 
-    label: "Programs", 
-    items: programsLinks
+  {
+    label: "Programs",
+    items: programsLinks,
   },
   { label: "Outreach", href: "/outreach" },
   { label: "Calendar", href: "/calendar" },
@@ -47,18 +48,12 @@ export default function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const closeMenu = useCallback(() => setMobileOpen(false), []);
+  const mobileDialogRef = useModalDialog({
+    open: mobileOpen,
+    onClose: closeMenu,
+  });
   const dropdownRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.classList.add("overflow-hidden");
-      closeBtnRef.current?.focus();
-    } else {
-      document.body.classList.remove("overflow-hidden");
-    }
-    return () => document.body.classList.remove("overflow-hidden");
-  }, [mobileOpen]);
 
   // Close mobile menu and dropdowns when route changes
   useEffect(() => {
@@ -71,7 +66,11 @@ export default function Navbar() {
     function handleClickOutside(event: MouseEvent) {
       if (openDropdown) {
         const dropdownEl = dropdownRefs.current[openDropdown];
-        if (dropdownEl && !dropdownEl.contains(event.target as Node)) {
+        if (
+          dropdownEl &&
+          event.target instanceof Node &&
+          !dropdownEl.contains(event.target)
+        ) {
           setOpenDropdown(null);
         }
       }
@@ -135,11 +134,14 @@ export default function Navbar() {
                 </li>
               ))}
             </ul>
-              
+
             {/* Programs Dropdown */}
-            <div className="dropdown dropdown-hover" ref={(el) => {
-              dropdownRefs.current.programs = el;
-            }}>
+            <div
+              className="dropdown dropdown-hover"
+              ref={(el) => {
+                dropdownRefs.current.programs = el;
+              }}
+            >
               <button
                 type="button"
                 onClick={() => toggleDropdown("programs")}
@@ -152,9 +154,7 @@ export default function Navbar() {
                 <ChevronDown className="w-4 h-4" />
               </button>
               {openDropdown === "programs" && (
-                <ul 
-                  className="menu dropdown-content bg-base-100 rounded-box z-[100] w-52 p-2 shadow-xl border border-base-300 mt-1 opacity-100 transition-opacity duration-200"
-                >
+                <ul className="menu dropdown-content bg-base-100 rounded-box z-[100] w-52 p-2 shadow-xl border border-base-300 mt-1 opacity-100 transition-opacity duration-200">
                   {programsLinks.map((item) => (
                     <li key={item.href}>
                       <Link
@@ -203,9 +203,13 @@ export default function Navbar() {
                 </li>
               ))}
             </ul>
-            
+
             <div className="flex items-center gap-2 ml-2">
-              <Link href="/join" prefetch={false} className="btn btn-primary btn-sm">
+              <Link
+                href="/join"
+                prefetch={false}
+                className="btn btn-primary btn-sm"
+              >
                 Join
               </Link>
               <Link
@@ -249,99 +253,98 @@ export default function Navbar() {
         </div>
       </div>
 
-      {mobileOpen && (
-        <div
-          id="mobile-menu"
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-[60] bg-base-100"
-          onKeyDown={(e) => {
-            if (e.key === "Escape") setMobileOpen(false);
-          }}
-        >
-          <div className="container mx-auto px-4 py-4 flex items-center justify-between border-b border-base-300">
-            <span className="font-semibold text-lg">Menu</span>
-            <button
-              ref={closeBtnRef}
-              type="button"
-              className="btn btn-ghost btn-square"
-              aria-label="Close menu"
-              onClick={() => setMobileOpen(false)}
+      <dialog
+        ref={mobileDialogRef}
+        id="mobile-menu"
+        aria-labelledby="mobile-menu-title"
+        className="fixed inset-0 m-0 h-dvh max-h-none w-screen max-w-none border-0 bg-base-100 p-0 text-base-content"
+      >
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between border-b border-base-300">
+          <span id="mobile-menu-title" className="font-semibold text-lg">
+            Menu
+          </span>
+          <button
+            data-modal-close
+            type="button"
+            className="btn btn-ghost btn-square"
+            aria-label="Close menu"
+            onClick={closeMenu}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-6 h-6"
+              aria-hidden="true"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="w-6 h-6"
-                aria-hidden="true"
-              >
-                <title>Close</title>
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-              </svg>
-            </button>
-          </div>
-          <nav className="container mx-auto px-4 py-4 overflow-y-auto max-h-[calc(100vh-80px)]">
-            <ul className="menu menu-lg bg-base-100">
-              {mobileMenuGroups.map((item) => {
-                if ("items" in item) {
-                  return (
-                    <li key={item.label}>
-                      <details>
-                        <summary className="font-semibold">{item.label}</summary>
-                        <ul>
-                          {item.items.map((subItem) => (
-                            <li key={subItem.href}>
-                              <Link
-                                href={subItem.href}
-                                prefetch={false}
-                                className={isActive(subItem.href) ? "active" : ""}
-                              >
-                                {subItem.label}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </details>
-                    </li>
-                  );
-                }
+              <title>Close</title>
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <nav className="container mx-auto px-4 py-4 overflow-y-auto max-h-[calc(100dvh-80px)]">
+          <ul className="menu menu-lg bg-base-100">
+            {mobileMenuGroups.map((item) => {
+              if ("items" in item) {
                 return (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      prefetch={false}
-                      className={isActive(item.href) ? "active" : ""}
-                      aria-current={isActive(item.href) ? "page" : undefined}
-                    >
-                      {item.label}
-                    </Link>
+                  <li key={item.label}>
+                    <details>
+                      <summary className="font-semibold">{item.label}</summary>
+                      <ul>
+                        {item.items.map((subItem) => (
+                          <li key={subItem.href}>
+                            <Link
+                              href={subItem.href}
+                              prefetch={false}
+                              onClick={closeMenu}
+                              className={isActive(subItem.href) ? "active" : ""}
+                            >
+                              {subItem.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
                   </li>
                 );
-              })}
-              <li className="mt-4">
-                <Link href="/join" prefetch={false} className="btn btn-primary">
-                  Join Robotics
-                </Link>
-              </li>
-              <li className="mt-2">
-                <Link
-                  href="https://www.paypal.com/ncp/payment/SCU42N7GPMVRL"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-secondary"
-                >
-                  Donate Now
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      )}
+              }
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    prefetch={false}
+                    onClick={closeMenu}
+                    className={isActive(item.href) ? "active" : ""}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+            <li className="mt-4">
+              <Link href="/join" prefetch={false} className="btn btn-primary">
+                Join Robotics
+              </Link>
+            </li>
+            <li className="mt-2">
+              <Link
+                href="https://www.paypal.com/ncp/payment/SCU42N7GPMVRL"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-secondary"
+              >
+                Donate Now
+              </Link>
+            </li>
+          </ul>
+        </nav>
+      </dialog>
     </header>
   );
 }

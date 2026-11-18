@@ -1,24 +1,25 @@
-import Image from 'next/image'
-import Link from 'next/link'
+import { formatDateOnly } from "@/lib/date-only";
+import Image from "next/image";
+import Link from "next/link";
 
-import { urlFor } from '@/sanity/lib/image'
-import type { SanityGalleryAlbum } from '@/sanity/lib/types'
+import { urlFor } from "@/sanity/lib/image";
+import type { SanityGalleryAlbum } from "@/sanity/lib/types";
 
 type GalleryAlbumCardProps = {
-  album: SanityGalleryAlbum
-}
+  album: SanityGalleryAlbum;
+};
 
 export default function GalleryAlbumCard({ album }: GalleryAlbumCardProps) {
-  const coverIndex = album.coverImageIndex ?? 0
-  const coverPhoto = album.photos[coverIndex]
+  const coverIndex = album.coverImageIndex ?? 0;
+  const coverPhoto = album.photos[coverIndex];
   const coverImage = coverPhoto?.image?.asset
-    ? urlFor(coverPhoto.image).width(1200).height(900).fit('crop').url()
-    : null
-  const formattedDate = new Date(album.eventDate).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-  })
+    ? urlFor(coverPhoto.image).width(1200).height(900).fit("crop").url()
+    : null;
+  const formattedDate = formatDateOnly(album.eventDate, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 
   return (
     <article className="overflow-hidden rounded-[1.5rem] border border-base-300 bg-base-100 shadow-lg transition-transform duration-200 hover:-translate-y-1 hover:shadow-xl">
@@ -40,11 +41,17 @@ export default function GalleryAlbumCard({ album }: GalleryAlbumCardProps) {
             <span>{formattedDate}</span>
           </div>
           <h3 className="text-2xl font-bold text-primary">{album.title}</h3>
-          {album.location ? <p className="text-sm text-base-content/65">{album.location}</p> : null}
-          {album.summary ? <p className="line-clamp-3 text-base-content/75">{album.summary}</p> : null}
-          <p className="text-sm font-medium text-base-content/55">{album.photos.length} photos</p>
+          {album.location ? (
+            <p className="text-sm text-base-content/65">{album.location}</p>
+          ) : null}
+          {album.summary ? (
+            <p className="line-clamp-3 text-base-content/75">{album.summary}</p>
+          ) : null}
+          <p className="text-sm font-medium text-base-content/55">
+            {album.photos.length} photos
+          </p>
         </div>
       </Link>
     </article>
-  )
+  );
 }
