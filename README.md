@@ -53,6 +53,7 @@ pnpm dev          # run locally
 pnpm build        # create a production build
 pnpm start        # run the production build
 pnpm lint         # run ESLint
+pnpm test         # run regression tests
 pnpm seed:sanity  # seed Sanity with starter content
 ```
 
@@ -74,6 +75,22 @@ scripts/          Content migration and seeding utilities
 - CMS-backed sponsors, gallery albums, and newsletters are defined in `sanity/schemaTypes`.
 - Static files that should be served directly belong in `public`.
 - The sponsorship packet download is `public/Sponsorship Proposal Packet.pdf` and is linked from `components/sponsorship-cta.tsx`.
+
+## Team calendar
+
+`/calendar` displays the team's Google Calendar for meetings, competitions, outreach, and other activities. Its page lives in `app/(site)/calendar/page.tsx`. The former `/outreach/calendar` URL permanently redirects to `/calendar`, and the calendar has its own navigation entry.
+
+## Outreach data
+
+`/outreach` reads the published Google Sheets CSV feed configured in `lib/outreach/source.ts`. Keep that source tab publicly published. Changes to the published data appear after the 15-minute cache expires and a visitor requests the page; Google may also take time to publish edits.
+
+The page shows one project list with search and a year filter. Dates and locations are visible; opening a project reveals its recorded attendance and hours. Six projects appear initially, with a button to show more. Current and upcoming projects appear first, followed by recent completed projects. Its `q`, `year`, and legacy `type` URL parameters can be bookmarked or shared. Old `/outreach/past` links redirect to `/outreach` and retain their filters.
+
+The server validates the sheet before caching it. Keep the column names used in `lib/outreach/parse.ts`, and enter dates as `MM/DD/YYYY`. Unreported measurements are omitted from project details, zero remains zero, and values such as `5+` remain minimums. Hours are shown as recorded.
+
+The page links to the original spreadsheet. If Google is unavailable, an existing successful cache can still be served; when no cache is available, the page shows an unavailable message with that source link.
+
+Run the spreadsheet parsing and calculation checks with `pnpm test:outreach`.
 
 ## Deployment
 

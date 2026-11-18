@@ -9,6 +9,7 @@ const staticRoutes = [
   "",
   "/about",
   "/aegis",
+  "/calendar",
   "/contact",
   "/events",
   "/ftc",
@@ -16,8 +17,6 @@ const staticRoutes = [
   "/join",
   "/newsletter",
   "/outreach",
-  "/outreach/calendar",
-  "/outreach/past",
   "/sponsors",
 ];
 

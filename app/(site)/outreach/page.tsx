@@ -1,30 +1,34 @@
-import React from "react";
 import type { Metadata } from "next";
 
+import OutreachHistory from "@/components/outreach/outreach-history";
+import {
+  OutreachLayout,
+  OutreachSource,
+  OutreachUnavailable,
+} from "@/components/outreach/outreach-layout";
+import { getOutreachContent } from "@/lib/outreach/content";
+import { getToday } from "@/lib/outreach/model";
+
 export const metadata: Metadata = {
-  title: "Outreach Data",
+  title: "Outreach",
   description:
-    "Explore Centreville Robotics' community outreach data and program impact.",
+    "See Centreville Robotics' latest outreach projects, school visits, and community events from our public outreach log.",
 };
 
-export default function Outreach() {
+export const dynamic = "force-dynamic";
+
+export default async function OutreachPage() {
+  const content = await getOutreachContent();
   return (
-    <section className="py-16 bg-base-100">
-      <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center text-primary mb-12">
-          Outreach Data
-        </h1>
-        <div className="flex justify-center">
-          <iframe
-            scrolling="yes"
-            src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTz51mFYdQ8Hx0Zs_fn0nuLW31JmJW7cxVxRibG32_N8gYfAAHtZCtyRu9XwrHlRlgJN88WWqV5g30Y/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false&amp;wmode=opaque"
-            width="800"
-            height="7000"
-            className="w-full max-w-4xl rounded-lg border border-gray-300 shadow-lg"
-            title="Team Data"
-          ></iframe>
-        </div>
-      </div>
-    </section>
+    <OutreachLayout>
+      {content.kind === "ready" ? (
+        <OutreachHistory events={content.events} today={getToday()} />
+      ) : (
+        <OutreachUnavailable />
+      )}
+      <OutreachSource
+        fetchedAt={content.kind === "ready" ? content.fetchedAt : null}
+      />
+    </OutreachLayout>
   );
 }
